@@ -1,0 +1,17 @@
+{
+  "name": "algochit",
+  "version": "1.0.0",
+  "description": "Blockchain-based Chit Fund Manager on Algorand",
+  "main": "index.js",
+  "scripts": {
+    "contract:build": "cd contracts && npm run build",
+    "backend:dev": "cd backend && npm run dev",
+    "backend:start": "cd backend && npm start",
+    "frontend:dev": "cd frontend && npm run dev",
+    "frontend:build": "cd frontend && npm run build",
+    "install:all": "npm install && cd contracts && npm install && cd ../backend && npm install && cd ../frontend && npm install"
+  },
+  "keywords": ["algorand", "blockchain", "chit-fund", "defi"],
+  "author": "AlgoChit Team",
+  "license": "MIT"
+}
