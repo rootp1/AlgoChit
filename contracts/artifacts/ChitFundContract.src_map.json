@@ -1,0 +1,2010 @@
+[
+  {
+    "teal": 1,
+    "source": 18
+  },
+  {
+    "teal": 13,
+    "source": 18
+  },
+  {
+    "teal": 14,
+    "source": 18
+  },
+  {
+    "teal": 15,
+    "source": 18
+  },
+  {
+    "teal": 16,
+    "source": 18
+  },
+  {
+    "teal": 17,
+    "source": 18
+  },
+  {
+    "teal": 18,
+    "source": 18
+  },
+  {
+    "teal": 19,
+    "source": 18
+  },
+  {
+    "teal": 23,
+    "source": 18,
+    "errorMessage": "The requested action is not implemented in this contract. Are you using the correct OnComplete? Did you set your app ID?"
+  },
+  {
+    "teal": 28,
+    "source": 36
+  },
+  {
+    "teal": 29,
+    "source": 36
+  },
+  {
+    "teal": 32,
+    "source": 35
+  },
+  {
+    "teal": 33,
+    "source": 35
+  },
+  {
+    "teal": 36,
+    "source": 34
+  },
+  {
+    "teal": 37,
+    "source": 34
+  },
+  {
+    "teal": 40,
+    "source": 33
+  },
+  {
+    "teal": 41,
+    "source": 33
+  },
+  {
+    "teal": 42,
+    "source": 33
+  },
+  {
+    "teal": 46,
+    "source": 33
+  },
+  {
+    "teal": 50,
+    "source": 38
+  },
+  {
+    "teal": 51,
+    "source": 38
+  },
+  {
+    "teal": 52,
+    "source": 38
+  },
+  {
+    "teal": 56,
+    "source": 39
+  },
+  {
+    "teal": 57,
+    "source": 39
+  },
+  {
+    "teal": 58,
+    "source": 39
+  },
+  {
+    "teal": 62,
+    "source": 40
+  },
+  {
+    "teal": 63,
+    "source": 40
+  },
+  {
+    "teal": 64,
+    "source": 40
+  },
+  {
+    "teal": 68,
+    "source": 41
+  },
+  {
+    "teal": 69,
+    "source": 41
+  },
+  {
+    "teal": 70,
+    "source": 41
+  },
+  {
+    "teal": 74,
+    "source": 42
+  },
+  {
+    "teal": 75,
+    "source": 42
+  },
+  {
+    "teal": 76,
+    "source": 42
+  },
+  {
+    "teal": 80,
+    "source": 43
+  },
+  {
+    "teal": 81,
+    "source": 43
+  },
+  {
+    "teal": 82,
+    "source": 43
+  },
+  {
+    "teal": 83,
+    "source": 43
+  },
+  {
+    "teal": 84,
+    "source": 43
+  },
+  {
+    "teal": 88,
+    "source": 44
+  },
+  {
+    "teal": 89,
+    "source": 44
+  },
+  {
+    "teal": 90,
+    "source": 44
+  },
+  {
+    "teal": 91,
+    "source": 44
+  },
+  {
+    "teal": 92,
+    "source": 44
+  },
+  {
+    "teal": 93,
+    "source": 44
+  },
+  {
+    "teal": 94,
+    "source": 44
+  },
+  {
+    "teal": 95,
+    "source": 33
+  },
+  {
+    "teal": 100,
+    "source": 48
+  },
+  {
+    "teal": 101,
+    "source": 48
+  },
+  {
+    "teal": 102,
+    "source": 48
+  },
+  {
+    "teal": 103,
+    "source": 48
+  },
+  {
+    "teal": 104,
+    "source": 48
+  },
+  {
+    "teal": 107,
+    "source": 48,
+    "errorMessage": "argument 0 (memberAddress) for addMember must be a address"
+  },
+  {
+    "teal": 110,
+    "source": 48
+  },
+  {
+    "teal": 111,
+    "source": 48
+  },
+  {
+    "teal": 112,
+    "source": 48
+  },
+  {
+    "teal": 116,
+    "source": 48
+  },
+  {
+    "teal": 119,
+    "source": 48
+  },
+  {
+    "teal": 123,
+    "source": 49
+  },
+  {
+    "teal": 124,
+    "source": 49
+  },
+  {
+    "teal": 125,
+    "source": 49
+  },
+  {
+    "teal": 126,
+    "source": 49
+  },
+  {
+    "teal": 129,
+    "source": 49,
+    "errorMessage": "Only manager can add members"
+  },
+  {
+    "teal": 133,
+    "source": 50
+  },
+  {
+    "teal": 134,
+    "source": 50
+  },
+  {
+    "teal": 135,
+    "source": 50
+  },
+  {
+    "teal": 136,
+    "source": 50
+  },
+  {
+    "teal": 137,
+    "source": 50
+  },
+  {
+    "teal": 140,
+    "source": 50,
+    "errorMessage": "Cannot add members after chit has started"
+  },
+  {
+    "teal": 149,
+    "source": 53
+  },
+  {
+    "teal": 150,
+    "source": 54
+  },
+  {
+    "teal": 151,
+    "source": 54
+  },
+  {
+    "teal": 152,
+    "source": 55
+  },
+  {
+    "teal": 153,
+    "source": 55
+  },
+  {
+    "teal": 154,
+    "source": 55
+  },
+  {
+    "teal": 155,
+    "source": 55
+  },
+  {
+    "teal": 156,
+    "source": 56
+  },
+  {
+    "teal": 157,
+    "source": 56
+  },
+  {
+    "teal": 158,
+    "source": 56
+  },
+  {
+    "teal": 159,
+    "source": 52
+  },
+  {
+    "teal": 163,
+    "source": 59
+  },
+  {
+    "teal": 164,
+    "source": 59
+  },
+  {
+    "teal": 165,
+    "source": 59
+  },
+  {
+    "teal": 166,
+    "source": 59
+  },
+  {
+    "teal": 167,
+    "source": 59
+  },
+  {
+    "teal": 168,
+    "source": 48
+  },
+  {
+    "teal": 173,
+    "source": 63
+  },
+  {
+    "teal": 174,
+    "source": 63
+  },
+  {
+    "teal": 175,
+    "source": 63
+  },
+  {
+    "teal": 179,
+    "source": 63
+  },
+  {
+    "teal": 183,
+    "source": 64
+  },
+  {
+    "teal": 184,
+    "source": 64
+  },
+  {
+    "teal": 185,
+    "source": 64
+  },
+  {
+    "teal": 186,
+    "source": 64
+  },
+  {
+    "teal": 189,
+    "source": 64,
+    "errorMessage": "Only manager can start chit"
+  },
+  {
+    "teal": 193,
+    "source": 65
+  },
+  {
+    "teal": 194,
+    "source": 65
+  },
+  {
+    "teal": 195,
+    "source": 65
+  },
+  {
+    "teal": 196,
+    "source": 65
+  },
+  {
+    "teal": 197,
+    "source": 65
+  },
+  {
+    "teal": 200,
+    "source": 65,
+    "errorMessage": "Chit already active"
+  },
+  {
+    "teal": 204,
+    "source": 67
+  },
+  {
+    "teal": 205,
+    "source": 67
+  },
+  {
+    "teal": 206,
+    "source": 67
+  },
+  {
+    "teal": 207,
+    "source": 67
+  },
+  {
+    "teal": 208,
+    "source": 67
+  },
+  {
+    "teal": 209,
+    "source": 67
+  },
+  {
+    "teal": 210,
+    "source": 67
+  },
+  {
+    "teal": 214,
+    "source": 68
+  },
+  {
+    "teal": 215,
+    "source": 68
+  },
+  {
+    "teal": 216,
+    "source": 68
+  },
+  {
+    "teal": 217,
+    "source": 63
+  },
+  {
+    "teal": 222,
+    "source": 72
+  },
+  {
+    "teal": 223,
+    "source": 72
+  },
+  {
+    "teal": 224,
+    "source": 72
+  },
+  {
+    "teal": 228,
+    "source": 72
+  },
+  {
+    "teal": 231,
+    "source": 72
+  },
+  {
+    "teal": 235,
+    "source": 73
+  },
+  {
+    "teal": 236,
+    "source": 73
+  },
+  {
+    "teal": 237,
+    "source": 73
+  },
+  {
+    "teal": 238,
+    "source": 73
+  },
+  {
+    "teal": 241,
+    "source": 73,
+    "errorMessage": "Chit fund not active"
+  },
+  {
+    "teal": 245,
+    "source": 75
+  },
+  {
+    "teal": 246,
+    "source": 75
+  },
+  {
+    "teal": 247,
+    "source": 75
+  },
+  {
+    "teal": 248,
+    "source": 75
+  },
+  {
+    "teal": 252,
+    "source": 76
+  },
+  {
+    "teal": 253,
+    "source": 76
+  },
+  {
+    "teal": 254,
+    "source": 76
+  },
+  {
+    "teal": 255,
+    "source": 76
+  },
+  {
+    "teal": 256,
+    "source": 76
+  },
+  {
+    "teal": 259,
+    "source": 76,
+    "errorMessage": "Not a registered member"
+  },
+  {
+    "teal": 263,
+    "source": 77
+  },
+  {
+    "teal": 264,
+    "source": 77
+  },
+  {
+    "teal": 265,
+    "source": 77
+  },
+  {
+    "teal": 266,
+    "source": 77
+  },
+  {
+    "teal": 267,
+    "source": 77
+  },
+  {
+    "teal": 268,
+    "source": 77
+  },
+  {
+    "teal": 269,
+    "source": 77
+  },
+  {
+    "teal": 272,
+    "source": 77,
+    "errorMessage": "Already contributed this month"
+  },
+  {
+    "teal": 276,
+    "source": 80
+  },
+  {
+    "teal": 277,
+    "source": 80
+  },
+  {
+    "teal": 278,
+    "source": 80
+  },
+  {
+    "teal": 281,
+    "source": 80,
+    "errorMessage": "Invalid sender"
+  },
+  {
+    "teal": 288,
+    "source": 81
+  },
+  {
+    "teal": 289,
+    "source": 81
+  },
+  {
+    "teal": 290,
+    "source": 81
+  },
+  {
+    "teal": 291,
+    "source": 81
+  },
+  {
+    "teal": 294,
+    "source": 81
+  },
+  {
+    "teal": 295,
+    "source": 81
+  },
+  {
+    "teal": 296,
+    "source": 81
+  },
+  {
+    "teal": 297,
+    "source": 81
+  },
+  {
+    "teal": 300,
+    "source": 81,
+    "errorMessage": "transaction verification failed: {\"txn\":\"this.txnGroup[this.txn.groupIndex - 1]\",\"field\":\"typeEnum\",\"expected\":\"pay\"}"
+  },
+  {
+    "teal": 303,
+    "source": 82
+  },
+  {
+    "teal": 304,
+    "source": 82
+  },
+  {
+    "teal": 305,
+    "source": 82
+  },
+  {
+    "teal": 306,
+    "source": 82
+  },
+  {
+    "teal": 309,
+    "source": 82,
+    "errorMessage": "transaction verification failed: {\"txn\":\"this.txnGroup[this.txn.groupIndex - 1]\",\"field\":\"receiver\",\"expected\":\"this.app.address\"}"
+  },
+  {
+    "teal": 312,
+    "source": 83
+  },
+  {
+    "teal": 313,
+    "source": 83
+  },
+  {
+    "teal": 314,
+    "source": 83
+  },
+  {
+    "teal": 315,
+    "source": 83
+  },
+  {
+    "teal": 316,
+    "source": 83
+  },
+  {
+    "teal": 319,
+    "source": 83,
+    "errorMessage": "transaction verification failed: {\"txn\":\"this.txnGroup[this.txn.groupIndex - 1]\",\"field\":\"amount\",\"expected\":\"this.monthlyContribution.value\"}"
+  },
+  {
+    "teal": 323,
+    "source": 86
+  },
+  {
+    "teal": 324,
+    "source": 86
+  },
+  {
+    "teal": 325,
+    "source": 86
+  },
+  {
+    "teal": 326,
+    "source": 86
+  },
+  {
+    "teal": 327,
+    "source": 86
+  },
+  {
+    "teal": 328,
+    "source": 86
+  },
+  {
+    "teal": 329,
+    "source": 86
+  },
+  {
+    "teal": 330,
+    "source": 86
+  },
+  {
+    "teal": 331,
+    "source": 86
+  },
+  {
+    "teal": 332,
+    "source": 86
+  },
+  {
+    "teal": 333,
+    "source": 86
+  },
+  {
+    "teal": 334,
+    "source": 86
+  },
+  {
+    "teal": 335,
+    "source": 75
+  },
+  {
+    "teal": 336,
+    "source": 75
+  },
+  {
+    "teal": 337,
+    "source": 75
+  },
+  {
+    "teal": 341,
+    "source": 87
+  },
+  {
+    "teal": 342,
+    "source": 87
+  },
+  {
+    "teal": 343,
+    "source": 87
+  },
+  {
+    "teal": 344,
+    "source": 87
+  },
+  {
+    "teal": 345,
+    "source": 87
+  },
+  {
+    "teal": 346,
+    "source": 87
+  },
+  {
+    "teal": 347,
+    "source": 87
+  },
+  {
+    "teal": 348,
+    "source": 75
+  },
+  {
+    "teal": 349,
+    "source": 75
+  },
+  {
+    "teal": 350,
+    "source": 75
+  },
+  {
+    "teal": 354,
+    "source": 89
+  },
+  {
+    "teal": 355,
+    "source": 89
+  },
+  {
+    "teal": 356,
+    "source": 89
+  },
+  {
+    "teal": 357,
+    "source": 75
+  },
+  {
+    "teal": 358,
+    "source": 75
+  },
+  {
+    "teal": 361,
+    "source": 75,
+    "errorMessage": "box value does not exist: this.members(this.txn.sender).value"
+  },
+  {
+    "teal": 362,
+    "source": 89
+  },
+  {
+    "teal": 363,
+    "source": 72
+  },
+  {
+    "teal": 368,
+    "source": 93
+  },
+  {
+    "teal": 369,
+    "source": 93
+  },
+  {
+    "teal": 372,
+    "source": 93
+  },
+  {
+    "teal": 373,
+    "source": 93
+  },
+  {
+    "teal": 374,
+    "source": 93
+  },
+  {
+    "teal": 378,
+    "source": 93
+  },
+  {
+    "teal": 381,
+    "source": 93
+  },
+  {
+    "teal": 382,
+    "source": 93
+  },
+  {
+    "teal": 386,
+    "source": 94
+  },
+  {
+    "teal": 387,
+    "source": 94
+  },
+  {
+    "teal": 388,
+    "source": 94
+  },
+  {
+    "teal": 389,
+    "source": 94
+  },
+  {
+    "teal": 392,
+    "source": 94,
+    "errorMessage": "Chit fund not active"
+  },
+  {
+    "teal": 396,
+    "source": 96
+  },
+  {
+    "teal": 397,
+    "source": 96
+  },
+  {
+    "teal": 398,
+    "source": 96
+  },
+  {
+    "teal": 399,
+    "source": 96
+  },
+  {
+    "teal": 403,
+    "source": 97
+  },
+  {
+    "teal": 404,
+    "source": 97
+  },
+  {
+    "teal": 405,
+    "source": 97
+  },
+  {
+    "teal": 406,
+    "source": 97
+  },
+  {
+    "teal": 407,
+    "source": 97
+  },
+  {
+    "teal": 410,
+    "source": 97,
+    "errorMessage": "Not a registered member"
+  },
+  {
+    "teal": 414,
+    "source": 98
+  },
+  {
+    "teal": 415,
+    "source": 98
+  },
+  {
+    "teal": 416,
+    "source": 98
+  },
+  {
+    "teal": 417,
+    "source": 98
+  },
+  {
+    "teal": 418,
+    "source": 98
+  },
+  {
+    "teal": 421,
+    "source": 98,
+    "errorMessage": "Already received pot"
+  },
+  {
+    "teal": 425,
+    "source": 99
+  },
+  {
+    "teal": 426,
+    "source": 99
+  },
+  {
+    "teal": 427,
+    "source": 99
+  },
+  {
+    "teal": 428,
+    "source": 99
+  },
+  {
+    "teal": 429,
+    "source": 99
+  },
+  {
+    "teal": 430,
+    "source": 99
+  },
+  {
+    "teal": 431,
+    "source": 99
+  },
+  {
+    "teal": 434,
+    "source": 99,
+    "errorMessage": "Must contribute before bidding"
+  },
+  {
+    "teal": 438,
+    "source": 100
+  },
+  {
+    "teal": 439,
+    "source": 100
+  },
+  {
+    "teal": 440,
+    "source": 100
+  },
+  {
+    "teal": 443,
+    "source": 100,
+    "errorMessage": "Discount cannot exceed 30%"
+  },
+  {
+    "teal": 451,
+    "source": 103
+  },
+  {
+    "teal": 452,
+    "source": 104
+  },
+  {
+    "teal": 453,
+    "source": 104
+  },
+  {
+    "teal": 454,
+    "source": 104
+  },
+  {
+    "teal": 455,
+    "source": 105
+  },
+  {
+    "teal": 456,
+    "source": 105
+  },
+  {
+    "teal": 457,
+    "source": 105
+  },
+  {
+    "teal": 458,
+    "source": 102
+  },
+  {
+    "teal": 462,
+    "source": 108
+  },
+  {
+    "teal": 463,
+    "source": 108
+  },
+  {
+    "teal": 464,
+    "source": 108
+  },
+  {
+    "teal": 465,
+    "source": 108
+  },
+  {
+    "teal": 466,
+    "source": 108
+  },
+  {
+    "teal": 467,
+    "source": 93
+  },
+  {
+    "teal": 472,
+    "source": 112
+  },
+  {
+    "teal": 473,
+    "source": 112
+  },
+  {
+    "teal": 474,
+    "source": 112
+  },
+  {
+    "teal": 475,
+    "source": 112
+  },
+  {
+    "teal": 476,
+    "source": 112
+  },
+  {
+    "teal": 479,
+    "source": 112,
+    "errorMessage": "argument 0 (winnerAddress) for selectWinnerAndDistribute must be a address"
+  },
+  {
+    "teal": 482,
+    "source": 112
+  },
+  {
+    "teal": 483,
+    "source": 112
+  },
+  {
+    "teal": 484,
+    "source": 112
+  },
+  {
+    "teal": 488,
+    "source": 112
+  },
+  {
+    "teal": 491,
+    "source": 112
+  },
+  {
+    "teal": 492,
+    "source": 112
+  },
+  {
+    "teal": 496,
+    "source": 113
+  },
+  {
+    "teal": 497,
+    "source": 113
+  },
+  {
+    "teal": 498,
+    "source": 113
+  },
+  {
+    "teal": 499,
+    "source": 113
+  },
+  {
+    "teal": 502,
+    "source": 113,
+    "errorMessage": "Only manager can select winner"
+  },
+  {
+    "teal": 506,
+    "source": 114
+  },
+  {
+    "teal": 507,
+    "source": 114
+  },
+  {
+    "teal": 508,
+    "source": 114
+  },
+  {
+    "teal": 509,
+    "source": 114
+  },
+  {
+    "teal": 512,
+    "source": 114,
+    "errorMessage": "Chit fund not active"
+  },
+  {
+    "teal": 516,
+    "source": 116
+  },
+  {
+    "teal": 517,
+    "source": 116
+  },
+  {
+    "teal": 518,
+    "source": 116
+  },
+  {
+    "teal": 519,
+    "source": 116
+  },
+  {
+    "teal": 523,
+    "source": 117
+  },
+  {
+    "teal": 524,
+    "source": 117
+  },
+  {
+    "teal": 525,
+    "source": 117
+  },
+  {
+    "teal": 526,
+    "source": 117
+  },
+  {
+    "teal": 527,
+    "source": 117
+  },
+  {
+    "teal": 530,
+    "source": 117,
+    "errorMessage": "Invalid winner address"
+  },
+  {
+    "teal": 534,
+    "source": 118
+  },
+  {
+    "teal": 535,
+    "source": 118
+  },
+  {
+    "teal": 536,
+    "source": 118
+  },
+  {
+    "teal": 537,
+    "source": 118
+  },
+  {
+    "teal": 538,
+    "source": 118
+  },
+  {
+    "teal": 541,
+    "source": 118,
+    "errorMessage": "Winner already received pot"
+  },
+  {
+    "teal": 545,
+    "source": 120
+  },
+  {
+    "teal": 546,
+    "source": 120
+  },
+  {
+    "teal": 547,
+    "source": 120
+  },
+  {
+    "teal": 548,
+    "source": 120
+  },
+  {
+    "teal": 552,
+    "source": 121
+  },
+  {
+    "teal": 553,
+    "source": 121
+  },
+  {
+    "teal": 554,
+    "source": 120
+  },
+  {
+    "teal": 555,
+    "source": 120
+  },
+  {
+    "teal": 556,
+    "source": 120
+  },
+  {
+    "teal": 557,
+    "source": 120
+  },
+  {
+    "teal": 558,
+    "source": 120
+  },
+  {
+    "teal": 559,
+    "source": 121
+  },
+  {
+    "teal": 560,
+    "source": 121
+  },
+  {
+    "teal": 563,
+    "source": 121,
+    "errorMessage": "No bid from winner"
+  },
+  {
+    "teal": 567,
+    "source": 124
+  },
+  {
+    "teal": 568,
+    "source": 124
+  },
+  {
+    "teal": 569,
+    "source": 124
+  },
+  {
+    "teal": 570,
+    "source": 124
+  },
+  {
+    "teal": 571,
+    "source": 120
+  },
+  {
+    "teal": 572,
+    "source": 120
+  },
+  {
+    "teal": 573,
+    "source": 120
+  },
+  {
+    "teal": 574,
+    "source": 120
+  },
+  {
+    "teal": 575,
+    "source": 120
+  },
+  {
+    "teal": 576,
+    "source": 124
+  },
+  {
+    "teal": 577,
+    "source": 124
+  },
+  {
+    "teal": 578,
+    "source": 124
+  },
+  {
+    "teal": 579,
+    "source": 124
+  },
+  {
+    "teal": 580,
+    "source": 124
+  },
+  {
+    "teal": 584,
+    "source": 125
+  },
+  {
+    "teal": 585,
+    "source": 125
+  },
+  {
+    "teal": 586,
+    "source": 125
+  },
+  {
+    "teal": 587,
+    "source": 125
+  },
+  {
+    "teal": 588,
+    "source": 125
+  },
+  {
+    "teal": 592,
+    "source": 128
+  },
+  {
+    "teal": 593,
+    "source": 128
+  },
+  {
+    "teal": 594,
+    "source": 128
+  },
+  {
+    "teal": 595,
+    "source": 128
+  },
+  {
+    "teal": 596,
+    "source": 128
+  },
+  {
+    "teal": 597,
+    "source": 128
+  },
+  {
+    "teal": 598,
+    "source": 128
+  },
+  {
+    "teal": 602,
+    "source": 129
+  },
+  {
+    "teal": 603,
+    "source": 129
+  },
+  {
+    "teal": 604,
+    "source": 129
+  },
+  {
+    "teal": 605,
+    "source": 129
+  },
+  {
+    "teal": 612,
+    "source": 132
+  },
+  {
+    "teal": 613,
+    "source": 132
+  },
+  {
+    "teal": 614,
+    "source": 132
+  },
+  {
+    "teal": 618,
+    "source": 133
+  },
+  {
+    "teal": 619,
+    "source": 133
+  },
+  {
+    "teal": 623,
+    "source": 134
+  },
+  {
+    "teal": 624,
+    "source": 134
+  },
+  {
+    "teal": 627,
+    "source": 132
+  },
+  {
+    "teal": 628,
+    "source": 132
+  },
+  {
+    "teal": 631,
+    "source": 132
+  },
+  {
+    "teal": 636,
+    "source": 138
+  },
+  {
+    "teal": 637,
+    "source": 138
+  },
+  {
+    "teal": 638,
+    "source": 138
+  },
+  {
+    "teal": 639,
+    "source": 138
+  },
+  {
+    "teal": 647,
+    "source": 139
+  },
+  {
+    "teal": 648,
+    "source": 139
+  },
+  {
+    "teal": 649,
+    "source": 139
+  },
+  {
+    "teal": 653,
+    "source": 140
+  },
+  {
+    "teal": 654,
+    "source": 140
+  },
+  {
+    "teal": 655,
+    "source": 140
+  },
+  {
+    "teal": 659,
+    "source": 141
+  },
+  {
+    "teal": 660,
+    "source": 141
+  },
+  {
+    "teal": 663,
+    "source": 139
+  },
+  {
+    "teal": 664,
+    "source": 139
+  },
+  {
+    "teal": 667,
+    "source": 139
+  },
+  {
+    "teal": 672,
+    "source": 146
+  },
+  {
+    "teal": 673,
+    "source": 146
+  },
+  {
+    "teal": 674,
+    "source": 146
+  },
+  {
+    "teal": 675,
+    "source": 146
+  },
+  {
+    "teal": 676,
+    "source": 146
+  },
+  {
+    "teal": 677,
+    "source": 116
+  },
+  {
+    "teal": 678,
+    "source": 116
+  },
+  {
+    "teal": 679,
+    "source": 116
+  },
+  {
+    "teal": 683,
+    "source": 147
+  },
+  {
+    "teal": 684,
+    "source": 147
+  },
+  {
+    "teal": 685,
+    "source": 147
+  },
+  {
+    "teal": 686,
+    "source": 116
+  },
+  {
+    "teal": 687,
+    "source": 116
+  },
+  {
+    "teal": 690,
+    "source": 116,
+    "errorMessage": "box value does not exist: this.members(winnerAddress).value"
+  },
+  {
+    "teal": 691,
+    "source": 147
+  },
+  {
+    "teal": 695,
+    "source": 150
+  },
+  {
+    "teal": 699,
+    "source": 153
+  },
+  {
+    "teal": 700,
+    "source": 153
+  },
+  {
+    "teal": 701,
+    "source": 153
+  },
+  {
+    "teal": 702,
+    "source": 153
+  },
+  {
+    "teal": 703,
+    "source": 153
+  },
+  {
+    "teal": 704,
+    "source": 153
+  },
+  {
+    "teal": 709,
+    "source": 156
+  },
+  {
+    "teal": 710,
+    "source": 156
+  },
+  {
+    "teal": 711,
+    "source": 156
+  },
+  {
+    "teal": 712,
+    "source": 156
+  },
+  {
+    "teal": 713,
+    "source": 156
+  },
+  {
+    "teal": 714,
+    "source": 156
+  },
+  {
+    "teal": 719,
+    "source": 157
+  },
+  {
+    "teal": 720,
+    "source": 157
+  },
+  {
+    "teal": 721,
+    "source": 157
+  },
+  {
+    "teal": 722,
+    "source": 157
+  },
+  {
+    "teal": 723,
+    "source": 157
+  },
+  {
+    "teal": 724,
+    "source": 157
+  },
+  {
+    "teal": 725,
+    "source": 157
+  },
+  {
+    "teal": 728,
+    "source": 112
+  },
+  {
+    "teal": 732,
+    "source": 162
+  },
+  {
+    "teal": 733,
+    "source": 162
+  },
+  {
+    "teal": 738,
+    "source": 169
+  },
+  {
+    "teal": 741,
+    "source": 169
+  },
+  {
+    "teal": 742,
+    "source": 169
+  },
+  {
+    "teal": 743,
+    "source": 169
+  },
+  {
+    "teal": 744,
+    "source": 169
+  },
+  {
+    "teal": 745,
+    "source": 169
+  },
+  {
+    "teal": 748,
+    "source": 169,
+    "errorMessage": "argument 0 (memberAddress) for getMemberDetails must be a address"
+  },
+  {
+    "teal": 751,
+    "source": 169
+  },
+  {
+    "teal": 752,
+    "source": 169
+  },
+  {
+    "teal": 753,
+    "source": 169
+  },
+  {
+    "teal": 754,
+    "source": 169
+  },
+  {
+    "teal": 755,
+    "source": 169
+  },
+  {
+    "teal": 759,
+    "source": 169
+  },
+  {
+    "teal": 763,
+    "source": 170
+  },
+  {
+    "teal": 764,
+    "source": 170
+  },
+  {
+    "teal": 765,
+    "source": 170
+  },
+  {
+    "teal": 766,
+    "source": 170
+  },
+  {
+    "teal": 769,
+    "source": 170,
+    "errorMessage": "box value does not exist: this.members(memberAddress).value"
+  },
+  {
+    "teal": 770,
+    "source": 169
+  },
+  {
+    "teal": 775,
+    "source": 174
+  },
+  {
+    "teal": 778,
+    "source": 174
+  },
+  {
+    "teal": 779,
+    "source": 174
+  },
+  {
+    "teal": 780,
+    "source": 174
+  },
+  {
+    "teal": 781,
+    "source": 174
+  },
+  {
+    "teal": 782,
+    "source": 174
+  },
+  {
+    "teal": 783,
+    "source": 174
+  },
+  {
+    "teal": 787,
+    "source": 174
+  },
+  {
+    "teal": 791,
+    "source": 175
+  },
+  {
+    "teal": 792,
+    "source": 175
+  },
+  {
+    "teal": 793,
+    "source": 174
+  },
+  {
+    "teal": 798,
+    "source": 179
+  },
+  {
+    "teal": 801,
+    "source": 179
+  },
+  {
+    "teal": 802,
+    "source": 179
+  },
+  {
+    "teal": 803,
+    "source": 179
+  },
+  {
+    "teal": 804,
+    "source": 179
+  },
+  {
+    "teal": 805,
+    "source": 179
+  },
+  {
+    "teal": 806,
+    "source": 179
+  },
+  {
+    "teal": 807,
+    "source": 179
+  },
+  {
+    "teal": 808,
+    "source": 179
+  },
+  {
+    "teal": 809,
+    "source": 179
+  },
+  {
+    "teal": 813,
+    "source": 179
+  },
+  {
+    "teal": 817,
+    "source": 180
+  },
+  {
+    "teal": 818,
+    "source": 180
+  },
+  {
+    "teal": 819,
+    "source": 180
+  },
+  {
+    "teal": 820,
+    "source": 180
+  },
+  {
+    "teal": 821,
+    "source": 179
+  },
+  {
+    "teal": 826,
+    "source": 184
+  },
+  {
+    "teal": 827,
+    "source": 184
+  },
+  {
+    "teal": 828,
+    "source": 184
+  },
+  {
+    "teal": 832,
+    "source": 184
+  },
+  {
+    "teal": 836,
+    "source": 185
+  },
+  {
+    "teal": 837,
+    "source": 185
+  },
+  {
+    "teal": 838,
+    "source": 185
+  },
+  {
+    "teal": 839,
+    "source": 185
+  },
+  {
+    "teal": 842,
+    "source": 185,
+    "errorMessage": "Only manager can pause"
+  },
+  {
+    "teal": 846,
+    "source": 186
+  },
+  {
+    "teal": 847,
+    "source": 186
+  },
+  {
+    "teal": 848,
+    "source": 186
+  },
+  {
+    "teal": 849,
+    "source": 186
+  },
+  {
+    "teal": 850,
+    "source": 186
+  },
+  {
+    "teal": 851,
+    "source": 186
+  },
+  {
+    "teal": 852,
+    "source": 186
+  },
+  {
+    "teal": 853,
+    "source": 184
+  },
+  {
+    "teal": 858,
+    "source": 190
+  },
+  {
+    "teal": 859,
+    "source": 190
+  },
+  {
+    "teal": 860,
+    "source": 190
+  },
+  {
+    "teal": 864,
+    "source": 190
+  },
+  {
+    "teal": 868,
+    "source": 191
+  },
+  {
+    "teal": 869,
+    "source": 191
+  },
+  {
+    "teal": 870,
+    "source": 191
+  },
+  {
+    "teal": 871,
+    "source": 191
+  },
+  {
+    "teal": 874,
+    "source": 191,
+    "errorMessage": "Only manager can resume"
+  },
+  {
+    "teal": 878,
+    "source": 192
+  },
+  {
+    "teal": 879,
+    "source": 192
+  },
+  {
+    "teal": 880,
+    "source": 192
+  },
+  {
+    "teal": 881,
+    "source": 192
+  },
+  {
+    "teal": 882,
+    "source": 192
+  },
+  {
+    "teal": 883,
+    "source": 192
+  },
+  {
+    "teal": 884,
+    "source": 192
+  },
+  {
+    "teal": 885,
+    "source": 190
+  },
+  {
+    "teal": 888,
+    "source": 18
+  },
+  {
+    "teal": 889,
+    "source": 18
+  },
+  {
+    "teal": 890,
+    "source": 18
+  },
+  {
+    "teal": 893,
+    "source": 18,
+    "errorMessage": "this contract does not implement the given ABI method for create NoOp"
+  },
+  {
+    "teal": 896,
+    "source": 18
+  },
+  {
+    "teal": 897,
+    "source": 18
+  },
+  {
+    "teal": 898,
+    "source": 18
+  },
+  {
+    "teal": 899,
+    "source": 18
+  },
+  {
+    "teal": 900,
+    "source": 18
+  },
+  {
+    "teal": 901,
+    "source": 18
+  },
+  {
+    "teal": 902,
+    "source": 18
+  },
+  {
+    "teal": 903,
+    "source": 18
+  },
+  {
+    "teal": 904,
+    "source": 18
+  },
+  {
+    "teal": 905,
+    "source": 18
+  },
+  {
+    "teal": 906,
+    "source": 18
+  },
+  {
+    "teal": 907,
+    "source": 18
+  },
+  {
+    "teal": 910,
+    "source": 18,
+    "errorMessage": "this contract does not implement the given ABI method for call NoOp"
+  }
+]

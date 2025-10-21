@@ -1,0 +1,96 @@
+{
+  "name": "ChitFundSimple",
+  "desc": "",
+  "methods": [
+    {
+      "name": "createApplication",
+      "args": [
+        {
+          "name": "monthlyContrib",
+          "type": "uint64"
+        },
+        {
+          "name": "commissionPercent",
+          "type": "uint64"
+        },
+        {
+          "name": "totalMembersCount",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "startChit",
+      "args": [],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "contribute",
+      "args": [],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "submitBid",
+      "args": [
+        {
+          "name": "discountPercent",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "distributePot",
+      "args": [
+        {
+          "name": "winnerAddress",
+          "type": "address"
+        },
+        {
+          "name": "discountPercent",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "getCurrentMonth",
+      "args": [],
+      "returns": {
+        "type": "uint64"
+      }
+    },
+    {
+      "name": "getChitStatus",
+      "args": [],
+      "returns": {
+        "type": "uint64"
+      }
+    },
+    {
+      "name": "pauseChit",
+      "args": [],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "resumeChit",
+      "args": [],
+      "returns": {
+        "type": "void"
+      }
+    }
+  ]
+}

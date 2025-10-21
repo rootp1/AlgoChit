@@ -26,8 +26,8 @@ export class ChitFundContract extends Contract {
   isActive = GlobalStateKey<boolean>();
 
   // Box storage for members and bids
-  members = BoxMap<Address, Member>();
-  currentBids = BoxMap<Address, Bid>();
+  members = BoxMap<Address, Member>({ prefix: 'm' });
+  currentBids = BoxMap<Address, Bid>({ prefix: 'b' });
 
   // Initialize the chit fund
   createApplication(

@@ -1,0 +1,116 @@
+{
+  "name": "ChitFundContract",
+  "desc": "",
+  "methods": [
+    {
+      "name": "createApplication",
+      "args": [
+        {
+          "name": "monthlyContrib",
+          "type": "uint64"
+        },
+        {
+          "name": "commissionPercent",
+          "type": "uint64"
+        },
+        {
+          "name": "totalMembersCount",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "addMember",
+      "args": [
+        {
+          "name": "memberAddress",
+          "type": "address"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "startChit",
+      "args": [],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "contribute",
+      "args": [],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "submitBid",
+      "args": [
+        {
+          "name": "discountPercent",
+          "type": "uint64"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "selectWinnerAndDistribute",
+      "args": [
+        {
+          "name": "winnerAddress",
+          "type": "address"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "getMemberDetails",
+      "args": [
+        {
+          "name": "memberAddress",
+          "type": "address"
+        }
+      ],
+      "returns": {
+        "type": "(address,uint64,bool,uint64)"
+      }
+    },
+    {
+      "name": "getCurrentMonth",
+      "args": [],
+      "returns": {
+        "type": "uint64"
+      }
+    },
+    {
+      "name": "getChitStatus",
+      "args": [],
+      "returns": {
+        "type": "bool"
+      }
+    },
+    {
+      "name": "pauseChit",
+      "args": [],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "resumeChit",
+      "args": [],
+      "returns": {
+        "type": "void"
+      }
+    }
+  ]
+}
