@@ -2,17 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import { config } from './config.js';
 import chitFundRoutes from './routes/chitFundRoutes.js';
-
 const app = express();
-
-// Middleware
 app.use(cors());
 app.use(express.json());
-
-// Routes
 app.use('/api/chitfund', chitFundRoutes);
-
-// Root endpoint
 app.get('/', (req, res) => {
   res.json({
     service: 'AlgoChit Backend API',
@@ -28,12 +21,10 @@ app.get('/', (req, res) => {
       memberDetails: 'GET /api/chitfund/members/:address',
       transactions: 'GET /api/chitfund/transactions',
       pause: 'POST /api/chitfund/pause',
-      resume: 'POST /api/chitfund/resume',
-    },
+      resume: 'POST /api/chitfund/resume'
+    }
   });
 });
-
-// Start server
 app.listen(config.port, () => {
   console.log(`AlgoChit Backend running on port ${config.port}`);
   console.log(`App ID: ${config.appId || 'Not configured'}`);

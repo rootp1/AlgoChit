@@ -1,5 +1,5 @@
 {
-  "name": "ChitFundSimple",
+  "name": "ChitFundFull",
   "desc": "",
   "methods": [
     {
@@ -18,13 +18,6 @@
           "type": "uint64"
         }
       ],
-      "returns": {
-        "type": "void"
-      }
-    },
-    {
-      "name": "startChit",
-      "args": [],
       "returns": {
         "type": "void"
       }
@@ -49,6 +42,13 @@
           "type": "address"
         }
       ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
+      "name": "startChit",
+      "args": [],
       "returns": {
         "type": "void"
       }
@@ -82,10 +82,6 @@
         {
           "name": "discountPercent",
           "type": "uint64"
-        },
-        {
-          "name": "memberAddresses",
-          "type": "address[]"
         }
       ],
       "returns": {
@@ -116,18 +112,6 @@
     {
       "name": "resumeChit",
       "args": [],
-      "returns": {
-        "type": "void"
-      }
-    },
-    {
-      "name": "updateTotalMembers",
-      "args": [
-        {
-          "name": "newTotal",
-          "type": "uint64"
-        }
-      ],
       "returns": {
         "type": "void"
       }

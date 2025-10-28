@@ -45,37 +45,37 @@ switch *call_NoOp *NOT_IMPLEMENTED *NOT_IMPLEMENTED *NOT_IMPLEMENTED *NOT_IMPLEM
 createApplication:
 	proto 3 0
 
-	// src/ChitFundSimple.algo.ts:19
+	// src/ChitFundSimple.algo.ts:14
 	// this.manager.value = this.txn.sender
 	byte 0x6d616e61676572 // "manager"
 	txn Sender
 	app_global_put
 
-	// src/ChitFundSimple.algo.ts:20
+	// src/ChitFundSimple.algo.ts:15
 	// this.monthlyContribution.value = monthlyContrib
 	byte 0x6d6f6e74686c79436f6e747269627574696f6e // "monthlyContribution"
 	frame_dig -1 // monthlyContrib: uint64
 	app_global_put
 
-	// src/ChitFundSimple.algo.ts:21
+	// src/ChitFundSimple.algo.ts:16
 	// this.managerCommissionPercent.value = commissionPercent
 	byte 0x6d616e61676572436f6d6d697373696f6e50657263656e74 // "managerCommissionPercent"
 	frame_dig -2 // commissionPercent: uint64
 	app_global_put
 
-	// src/ChitFundSimple.algo.ts:22
+	// src/ChitFundSimple.algo.ts:17
 	// this.totalMembers.value = totalMembersCount
 	byte 0x746f74616c4d656d62657273 // "totalMembers"
 	frame_dig -3 // totalMembersCount: uint64
 	app_global_put
 
-	// src/ChitFundSimple.algo.ts:23
+	// src/ChitFundSimple.algo.ts:18
 	// this.currentMonth.value = 0
 	byte 0x63757272656e744d6f6e7468 // "currentMonth"
 	int 0
 	app_global_put
 
-	// src/ChitFundSimple.algo.ts:24
+	// src/ChitFundSimple.algo.ts:19
 	// this.chitValue.value = monthlyContrib * totalMembersCount
 	byte 0x6368697456616c7565 // "chitValue"
 	frame_dig -1 // monthlyContrib: uint64
@@ -83,7 +83,7 @@ createApplication:
 	*
 	app_global_put
 
-	// src/ChitFundSimple.algo.ts:25
+	// src/ChitFundSimple.algo.ts:20
 	// this.isActive.value = 0
 	byte 0x6973416374697665 // "isActive"
 	int 0
@@ -101,6 +101,56 @@ createApplication:
 startChit:
 	proto 0 0
 
+	// src/ChitFundSimple.algo.ts:23
+	// assert(this.txn.sender === this.manager.value)
+	txn Sender
+	byte 0x6d616e61676572 // "manager"
+	app_global_get
+	==
+	assert
+
+	// src/ChitFundSimple.algo.ts:24
+	// assert(this.isActive.value === 0)
+	byte 0x6973416374697665 // "isActive"
+	app_global_get
+	int 0
+	==
+	assert
+
+	// src/ChitFundSimple.algo.ts:25
+	// this.isActive.value = 1
+	byte 0x6973416374697665 // "isActive"
+	int 1
+	app_global_put
+
+	// src/ChitFundSimple.algo.ts:26
+	// this.currentMonth.value = 1
+	byte 0x63757272656e744d6f6e7468 // "currentMonth"
+	int 1
+	app_global_put
+	retsub
+
+// addMember(address)void
+*abi_route_addMember:
+	// memberAddress: address
+	txna ApplicationArgs 1
+	dup
+	len
+	int 32
+	==
+
+	// argument 0 (memberAddress) for addMember must be a address
+	assert
+
+	// execute addMember(address)void
+	callsub addMember
+	int 1
+	return
+
+// addMember(memberAddress: Address): void
+addMember:
+	proto 1 0
+
 	// src/ChitFundSimple.algo.ts:30
 	// assert(this.txn.sender === this.manager.value)
 	txn Sender
@@ -110,6 +160,44 @@ startChit:
 	assert
 
 	// src/ChitFundSimple.algo.ts:31
+	// this.members(memberAddress).value = 1
+	byte 0x6d // "m"
+	frame_dig -1 // memberAddress: Address
+	concat
+	byte 0x0000000000000001
+	box_put
+	retsub
+
+// removeMember(address)void
+*abi_route_removeMember:
+	// memberAddress: address
+	txna ApplicationArgs 1
+	dup
+	len
+	int 32
+	==
+
+	// argument 0 (memberAddress) for removeMember must be a address
+	assert
+
+	// execute removeMember(address)void
+	callsub removeMember
+	int 1
+	return
+
+// removeMember(memberAddress: Address): void
+removeMember:
+	proto 1 0
+
+	// src/ChitFundSimple.algo.ts:35
+	// assert(this.txn.sender === this.manager.value)
+	txn Sender
+	byte 0x6d616e61676572 // "manager"
+	app_global_get
+	==
+	assert
+
+	// src/ChitFundSimple.algo.ts:36
 	// assert(this.isActive.value === 0)
 	byte 0x6973416374697665 // "isActive"
 	app_global_get
@@ -117,17 +205,12 @@ startChit:
 	==
 	assert
 
-	// src/ChitFundSimple.algo.ts:33
-	// this.isActive.value = 1
-	byte 0x6973416374697665 // "isActive"
-	int 1
-	app_global_put
-
-	// src/ChitFundSimple.algo.ts:34
-	// this.currentMonth.value = 1
-	byte 0x63757272656e744d6f6e7468 // "currentMonth"
-	int 1
-	app_global_put
+	// src/ChitFundSimple.algo.ts:37
+	// this.members(memberAddress).delete()
+	byte 0x6d // "m"
+	frame_dig -1 // memberAddress: Address
+	concat
+	box_del
 	retsub
 
 // contribute()void
@@ -141,7 +224,7 @@ startChit:
 contribute:
 	proto 0 0
 
-	// src/ChitFundSimple.algo.ts:39
+	// src/ChitFundSimple.algo.ts:41
 	// assert(this.isActive.value === 1)
 	byte 0x6973416374697665 // "isActive"
 	app_global_get
@@ -152,7 +235,7 @@ contribute:
 	// src/ChitFundSimple.algo.ts:42
 	// verifyPayTxn(this.txnGroup[this.txn.groupIndex - 1], {
 	//       receiver: this.app.address,
-	//       amount: this.monthlyContribution.value,
+	//       amount: this.monthlyContribution.value
 	//     })
 	txn GroupIndex
 	int 1
@@ -203,7 +286,7 @@ contribute:
 submitBid:
 	proto 1 0
 
-	// src/ChitFundSimple.algo.ts:50
+	// src/ChitFundSimple.algo.ts:48
 	// assert(this.isActive.value === 1)
 	byte 0x6973416374697665 // "isActive"
 	app_global_get
@@ -211,16 +294,29 @@ submitBid:
 	==
 	assert
 
-	// src/ChitFundSimple.algo.ts:51
+	// src/ChitFundSimple.algo.ts:49
 	// assert(discountPercent <= 30)
 	frame_dig -1 // discountPercent: uint64
 	int 30
 	<=
 	assert
+
+	// src/ChitFundSimple.algo.ts:50
+	// this.bids(this.txn.sender).value = discountPercent
+	byte 0x62 // "b"
+	txn Sender
+	concat
+	frame_dig -1 // discountPercent: uint64
+	itob
+	box_put
 	retsub
 
-// distributePot(address,uint64)void
+// distributePot(address,uint64,address[])void
 *abi_route_distributePot:
+	// memberAddresses: address[]
+	txna ApplicationArgs 3
+	extract 2 0
+
 	// discountPercent: uint64
 	txna ApplicationArgs 2
 	btoi
@@ -232,23 +328,23 @@ submitBid:
 	int 32
 	==
 
-	// argument 1 (winnerAddress) for distributePot must be a address
+	// argument 2 (winnerAddress) for distributePot must be a address
 	assert
 
-	// execute distributePot(address,uint64)void
+	// execute distributePot(address,uint64,address[])void
 	callsub distributePot
 	int 1
 	return
 
-// distributePot(winnerAddress: Address, discountPercent: uint64): void
+// distributePot(winnerAddress: Address, discountPercent: uint64, memberAddresses: Address[]): void
 distributePot:
-	proto 2 0
+	proto 3 0
 
 	// Push empty bytes after the frame pointer to reserve space for local variables
 	byte 0x
-	dupn 2
+	dupn 7
 
-	// src/ChitFundSimple.algo.ts:56
+	// src/ChitFundSimple.algo.ts:57
 	// assert(this.txn.sender === this.manager.value)
 	txn Sender
 	byte 0x6d616e61676572 // "manager"
@@ -256,7 +352,7 @@ distributePot:
 	==
 	assert
 
-	// src/ChitFundSimple.algo.ts:57
+	// src/ChitFundSimple.algo.ts:58
 	// assert(this.isActive.value === 1)
 	byte 0x6973416374697665 // "isActive"
 	app_global_get
@@ -265,7 +361,7 @@ distributePot:
 	assert
 
 	// src/ChitFundSimple.algo.ts:60
-	// discountAmount = (this.chitValue.value * discountPercent) / 100
+	// discountAmount = this.chitValue.value * discountPercent / 100
 	byte 0x6368697456616c7565 // "chitValue"
 	app_global_get
 	frame_dig -2 // discountPercent: uint64
@@ -282,8 +378,8 @@ distributePot:
 	-
 	frame_bury 1 // potAfterDiscount: uint64
 
-	// src/ChitFundSimple.algo.ts:64
-	// commission = (discountAmount * this.managerCommissionPercent.value) / 100
+	// src/ChitFundSimple.algo.ts:62
+	// commission = discountAmount * this.managerCommissionPercent.value / 100
 	frame_dig 0 // discountAmount: uint64
 	byte 0x6d616e61676572436f6d6d697373696f6e50657263656e74 // "managerCommissionPercent"
 	app_global_get
@@ -292,21 +388,28 @@ distributePot:
 	/
 	frame_bury 2 // commission: uint64
 
-	// src/ChitFundSimple.algo.ts:67
+	// src/ChitFundSimple.algo.ts:63
+	// remainingDiscount = discountAmount - commission
+	frame_dig 0 // discountAmount: uint64
+	frame_dig 2 // commission: uint64
+	-
+	frame_bury 3 // remainingDiscount: uint64
+
+	// src/ChitFundSimple.algo.ts:65
 	// sendPayment({
 	//       receiver: winnerAddress,
-	//       amount: potAfterDiscount,
+	//       amount: potAfterDiscount
 	//     })
 	itxn_begin
 	int pay
 	itxn_field TypeEnum
 
-	// src/ChitFundSimple.algo.ts:68
+	// src/ChitFundSimple.algo.ts:66
 	// receiver: winnerAddress
 	frame_dig -1 // winnerAddress: Address
 	itxn_field Receiver
 
-	// src/ChitFundSimple.algo.ts:69
+	// src/ChitFundSimple.algo.ts:67
 	// amount: potAfterDiscount
 	frame_dig 1 // potAfterDiscount: uint64
 	itxn_field Amount
@@ -319,7 +422,7 @@ distributePot:
 	itxn_submit
 
 	// *if0_condition
-	// src/ChitFundSimple.algo.ts:73
+	// src/ChitFundSimple.algo.ts:70
 	// commission > 0
 	frame_dig 2 // commission: uint64
 	int 0
@@ -327,22 +430,22 @@ distributePot:
 	bz *if0_end
 
 	// *if0_consequent
-	// src/ChitFundSimple.algo.ts:74
+	// src/ChitFundSimple.algo.ts:71
 	// sendPayment({
 	//         receiver: this.manager.value,
-	//         amount: commission,
+	//         amount: commission
 	//       })
 	itxn_begin
 	int pay
 	itxn_field TypeEnum
 
-	// src/ChitFundSimple.algo.ts:75
+	// src/ChitFundSimple.algo.ts:72
 	// receiver: this.manager.value
 	byte 0x6d616e61676572 // "manager"
 	app_global_get
 	itxn_field Receiver
 
-	// src/ChitFundSimple.algo.ts:76
+	// src/ChitFundSimple.algo.ts:73
 	// amount: commission
 	frame_dig 2 // commission: uint64
 	itxn_field Amount
@@ -355,7 +458,189 @@ distributePot:
 	itxn_submit
 
 *if0_end:
+	// *if1_condition
+	// src/ChitFundSimple.algo.ts:77
+	// remainingDiscount > 0 && memberAddresses.length > 0
+	frame_dig 3 // remainingDiscount: uint64
+	int 0
+	>
+	dup
+	bz *skip_and0
+	frame_dig -3 // memberAddresses: Address[]
+	len
+	int 32
+	/
+	int 0
+	>
+	&&
+
+*skip_and0:
+	bz *if1_end
+
+	// *if1_consequent
+	// src/ChitFundSimple.algo.ts:78
+	// nonWinnerCount: uint64 = 0
+	int 0
+	frame_bury 4 // nonWinnerCount: uint64
+
+	// src/ChitFundSimple.algo.ts:79
+	// for (let i = 0; i < memberAddresses.length; i = i + 1)
+	int 0
+	frame_bury 5 // i: uint64
+
+*for_0:
+	// src/ChitFundSimple.algo.ts:79
+	// i < memberAddresses.length
+	frame_dig 5 // i: uint64
+	frame_dig -3 // memberAddresses: Address[]
+	len
+	int 32
+	/
+	<
+	bz *for_0_end
+
+	// *if2_condition
+	// src/ChitFundSimple.algo.ts:80
+	// memberAddresses[i] !== winnerAddress
+	frame_dig -3 // memberAddresses: Address[]
+	store 255 // full array
+	int 0 // initial offset
+	frame_dig 5 // i: uint64
+	int 32
+	* // acc * typeLength
+	+
+	load 255 // full array
+	swap
+	int 32
+	extract3
+	frame_dig -1 // winnerAddress: Address
+	!=
+	bz *if2_end
+
+	// *if2_consequent
 	// src/ChitFundSimple.algo.ts:81
+	// nonWinnerCount = nonWinnerCount + 1
+	frame_dig 4 // nonWinnerCount: uint64
+	int 1
+	+
+	frame_bury 4 // nonWinnerCount: uint64
+
+*if2_end:
+
+*for_0_continue:
+	// src/ChitFundSimple.algo.ts:79
+	// i = i + 1
+	frame_dig 5 // i: uint64
+	int 1
+	+
+	frame_bury 5 // i: uint64
+	b *for_0
+
+*for_0_end:
+	// *if3_condition
+	// src/ChitFundSimple.algo.ts:85
+	// nonWinnerCount > 0
+	frame_dig 4 // nonWinnerCount: uint64
+	int 0
+	>
+	bz *if3_end
+
+	// *if3_consequent
+	// src/ChitFundSimple.algo.ts:86
+	// perMemberShare = remainingDiscount / nonWinnerCount
+	frame_dig 3 // remainingDiscount: uint64
+	frame_dig 4 // nonWinnerCount: uint64
+	/
+	frame_bury 6 // perMemberShare: uint64
+
+	// src/ChitFundSimple.algo.ts:88
+	// for (let i = 0; i < memberAddresses.length; i = i + 1)
+	int 0
+	frame_bury 7 // i: uint64
+
+*for_1:
+	// src/ChitFundSimple.algo.ts:88
+	// i < memberAddresses.length
+	frame_dig 7 // i: uint64
+	frame_dig -3 // memberAddresses: Address[]
+	len
+	int 32
+	/
+	<
+	bz *for_1_end
+
+	// *if4_condition
+	// src/ChitFundSimple.algo.ts:89
+	// memberAddresses[i] !== winnerAddress
+	frame_dig -3 // memberAddresses: Address[]
+	store 255 // full array
+	int 0 // initial offset
+	frame_dig 7 // i: uint64
+	int 32
+	* // acc * typeLength
+	+
+	load 255 // full array
+	swap
+	int 32
+	extract3
+	frame_dig -1 // winnerAddress: Address
+	!=
+	bz *if4_end
+
+	// *if4_consequent
+	// src/ChitFundSimple.algo.ts:90
+	// sendPayment({
+	//               receiver: memberAddresses[i],
+	//               amount: perMemberShare
+	//             })
+	itxn_begin
+	int pay
+	itxn_field TypeEnum
+
+	// src/ChitFundSimple.algo.ts:91
+	// receiver: memberAddresses[i]
+	frame_dig -3 // memberAddresses: Address[]
+	store 255 // full array
+	int 0 // initial offset
+	frame_dig 7 // i: uint64
+	int 32
+	* // acc * typeLength
+	+
+	load 255 // full array
+	swap
+	int 32
+	extract3
+	itxn_field Receiver
+
+	// src/ChitFundSimple.algo.ts:92
+	// amount: perMemberShare
+	frame_dig 6 // perMemberShare: uint64
+	itxn_field Amount
+
+	// Fee field not set, defaulting to 0
+	int 0
+	itxn_field Fee
+
+	// Submit inner transaction
+	itxn_submit
+
+*if4_end:
+
+*for_1_continue:
+	// src/ChitFundSimple.algo.ts:88
+	// i = i + 1
+	frame_dig 7 // i: uint64
+	int 1
+	+
+	frame_bury 7 // i: uint64
+	b *for_1
+
+*for_1_end:
+
+*if3_end:
+
+*if1_end:
+	// src/ChitFundSimple.algo.ts:99
 	// this.currentMonth.value = this.currentMonth.value + 1
 	byte 0x63757272656e744d6f6e7468 // "currentMonth"
 	dup
@@ -364,24 +649,24 @@ distributePot:
 	+
 	app_global_put
 
-	// *if1_condition
-	// src/ChitFundSimple.algo.ts:84
+	// *if5_condition
+	// src/ChitFundSimple.algo.ts:100
 	// this.currentMonth.value > this.totalMembers.value
 	byte 0x63757272656e744d6f6e7468 // "currentMonth"
 	app_global_get
 	byte 0x746f74616c4d656d62657273 // "totalMembers"
 	app_global_get
 	>
-	bz *if1_end
+	bz *if5_end
 
-	// *if1_consequent
-	// src/ChitFundSimple.algo.ts:85
+	// *if5_consequent
+	// src/ChitFundSimple.algo.ts:101
 	// this.isActive.value = 0
 	byte 0x6973416374697665 // "isActive"
 	int 0
 	app_global_put
 
-*if1_end:
+*if5_end:
 	retsub
 
 // getCurrentMonth()uint64
@@ -401,7 +686,7 @@ distributePot:
 getCurrentMonth:
 	proto 0 1
 
-	// src/ChitFundSimple.algo.ts:91
+	// src/ChitFundSimple.algo.ts:105
 	// return this.currentMonth.value;
 	byte 0x63757272656e744d6f6e7468 // "currentMonth"
 	app_global_get
@@ -424,7 +709,7 @@ getCurrentMonth:
 getChitStatus:
 	proto 0 1
 
-	// src/ChitFundSimple.algo.ts:96
+	// src/ChitFundSimple.algo.ts:108
 	// return this.isActive.value;
 	byte 0x6973416374697665 // "isActive"
 	app_global_get
@@ -441,7 +726,7 @@ getChitStatus:
 pauseChit:
 	proto 0 0
 
-	// src/ChitFundSimple.algo.ts:101
+	// src/ChitFundSimple.algo.ts:111
 	// assert(this.txn.sender === this.manager.value)
 	txn Sender
 	byte 0x6d616e61676572 // "manager"
@@ -449,7 +734,7 @@ pauseChit:
 	==
 	assert
 
-	// src/ChitFundSimple.algo.ts:102
+	// src/ChitFundSimple.algo.ts:112
 	// this.isActive.value = 0
 	byte 0x6973416374697665 // "isActive"
 	int 0
@@ -467,7 +752,7 @@ pauseChit:
 resumeChit:
 	proto 0 0
 
-	// src/ChitFundSimple.algo.ts:107
+	// src/ChitFundSimple.algo.ts:115
 	// assert(this.txn.sender === this.manager.value)
 	txn Sender
 	byte 0x6d616e61676572 // "manager"
@@ -475,10 +760,56 @@ resumeChit:
 	==
 	assert
 
-	// src/ChitFundSimple.algo.ts:108
+	// src/ChitFundSimple.algo.ts:116
 	// this.isActive.value = 1
 	byte 0x6973416374697665 // "isActive"
 	int 1
+	app_global_put
+	retsub
+
+// updateTotalMembers(uint64)void
+*abi_route_updateTotalMembers:
+	// newTotal: uint64
+	txna ApplicationArgs 1
+	btoi
+
+	// execute updateTotalMembers(uint64)void
+	callsub updateTotalMembers
+	int 1
+	return
+
+// updateTotalMembers(newTotal: uint64): void
+updateTotalMembers:
+	proto 1 0
+
+	// src/ChitFundSimple.algo.ts:119
+	// assert(this.txn.sender === this.manager.value)
+	txn Sender
+	byte 0x6d616e61676572 // "manager"
+	app_global_get
+	==
+	assert
+
+	// src/ChitFundSimple.algo.ts:120
+	// assert(newTotal > 0)
+	frame_dig -1 // newTotal: uint64
+	int 0
+	>
+	assert
+
+	// src/ChitFundSimple.algo.ts:121
+	// this.totalMembers.value = newTotal
+	byte 0x746f74616c4d656d62657273 // "totalMembers"
+	frame_dig -1 // newTotal: uint64
+	app_global_put
+
+	// src/ChitFundSimple.algo.ts:122
+	// this.chitValue.value = this.monthlyContribution.value * newTotal
+	byte 0x6368697456616c7565 // "chitValue"
+	byte 0x6d6f6e74686c79436f6e747269627574696f6e // "monthlyContribution"
+	app_global_get
+	frame_dig -1 // newTotal: uint64
+	*
 	app_global_put
 	retsub
 
@@ -492,15 +823,18 @@ resumeChit:
 
 *call_NoOp:
 	method "startChit()void"
+	method "addMember(address)void"
+	method "removeMember(address)void"
 	method "contribute()void"
 	method "submitBid(uint64)void"
-	method "distributePot(address,uint64)void"
+	method "distributePot(address,uint64,address[])void"
 	method "getCurrentMonth()uint64"
 	method "getChitStatus()uint64"
 	method "pauseChit()void"
 	method "resumeChit()void"
+	method "updateTotalMembers(uint64)void"
 	txna ApplicationArgs 0
-	match *abi_route_startChit *abi_route_contribute *abi_route_submitBid *abi_route_distributePot *abi_route_getCurrentMonth *abi_route_getChitStatus *abi_route_pauseChit *abi_route_resumeChit
+	match *abi_route_startChit *abi_route_addMember *abi_route_removeMember *abi_route_contribute *abi_route_submitBid *abi_route_distributePot *abi_route_getCurrentMonth *abi_route_getChitStatus *abi_route_pauseChit *abi_route_resumeChit *abi_route_updateTotalMembers
 
 	// this contract does not implement the given ABI method for call NoOp
 	err

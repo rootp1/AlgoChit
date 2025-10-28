@@ -87,10 +87,6 @@ createApplication:
 
 	byte 0x6973416374697665
 	int 0
-	byte 0x00
-	int 0
-	uncover 2
-	setbit
 	app_global_put
 	retsub
 
@@ -124,8 +120,6 @@ addMember:
 	byte 0x6d616e61676572
 	app_global_get
 	==
-
-
 	assert
 
 
@@ -133,38 +127,51 @@ addMember:
 	byte 0x6973416374697665
 	app_global_get
 	int 0
-	getbit
-	!
+	==
+	assert
+
+
+
+	byte 0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+	frame_bury 0
+	retsub
+
+
+*abi_route_removeMember:
+
+	txna ApplicationArgs 1
+	dup
+	len
+	int 32
+	==
 
 
 	assert
 
 
+	callsub removeMember
+	int 1
+	return
+
+
+removeMember:
+	proto 1 0
 
 
 
+	txn Sender
+	byte 0x6d616e61676572
+	app_global_get
+	==
+	assert
 
 
 
-	frame_dig -1
-	byte 0x0000000000000000
-	concat
-	byte 0x00
+	byte 0x6973416374697665
+	app_global_get
 	int 0
-	dup
-	setbit
-	concat
-	byte 0x0000000000000000
-	concat
-	frame_bury 0
-
-
-
-	byte 0x6d
-	frame_dig -1
-	concat
-	frame_dig 0
-	box_put
+	==
+	assert
 	retsub
 
 
@@ -184,8 +191,6 @@ startChit:
 	byte 0x6d616e61676572
 	app_global_get
 	==
-
-
 	assert
 
 
@@ -193,20 +198,13 @@ startChit:
 	byte 0x6973416374697665
 	app_global_get
 	int 0
-	getbit
-	!
-
-
+	==
 	assert
 
 
 
 	byte 0x6973416374697665
 	int 1
-	byte 0x00
-	int 0
-	uncover 2
-	setbit
 	app_global_put
 
 
@@ -228,56 +226,11 @@ contribute:
 	proto 0 0
 
 
-	byte 0x
-
-
 
 	byte 0x6973416374697665
 	app_global_get
-	int 0
-	getbit
-
-
-	assert
-
-
-
-	byte 0x6d
-	txn Sender
-	concat
-	frame_bury 0
-
-
-
-	store 255
-	load 255
-	extract 0 32
-	txn Sender
+	int 1
 	==
-
-
-	assert
-
-
-
-	store 255
-	load 255
-	extract 41 8
-	btoi
-	byte 0x63757272656e744d6f6e7468
-	app_global_get
-	<
-
-
-	assert
-
-
-
-	txn Sender
-	txn Sender
-	==
-
-
 	assert
 
 
@@ -317,49 +270,6 @@ contribute:
 
 
 	assert
-
-
-
-	store 255
-	load 255
-	int 32
-	store 255
-	load 255
-	extract 32 8
-	btoi
-	byte 0x6d6f6e74686c79436f6e747269627574696f6e
-	app_global_get
-	+
-	itob
-	replace3
-	frame_dig 0
-	cover 2
-	box_replace
-
-
-
-	store 255
-	load 255
-	int 41
-	byte 0x63757272656e744d6f6e7468
-	app_global_get
-	itob
-	replace3
-	frame_dig 0
-	cover 2
-	box_replace
-
-
-
-	byte 0x6d
-	txn Sender
-	concat
-	frame_dig 0
-	box_get
-
-
-	assert
-	box_put
 	retsub
 
 
@@ -378,59 +288,11 @@ submitBid:
 	proto 1 0
 
 
-	byte 0x
-	dup
-
-
 
 	byte 0x6973416374697665
 	app_global_get
-	int 0
-	getbit
-
-
-	assert
-
-
-
-	byte 0x6d
-	txn Sender
-	concat
-	frame_bury 0
-
-
-
-	store 255
-	load 255
-	extract 0 32
-	txn Sender
+	int 1
 	==
-
-
-	assert
-
-
-
-	store 255
-	load 255
-	int 320
-	getbit
-	!
-
-
-	assert
-
-
-
-	store 255
-	load 255
-	extract 41 8
-	btoi
-	byte 0x63757272656e744d6f6e7468
-	app_global_get
-	==
-
-
 	assert
 
 
@@ -438,36 +300,15 @@ submitBid:
 	frame_dig -1
 	int 30
 	<=
-
-
 	assert
-
-
-
-
-
-
-
-	txn Sender
-	frame_dig -1
-	itob
-	concat
-	global LatestTimestamp
-	itob
-	concat
-	frame_bury 1
-
-
-
-	byte 0x62
-	txn Sender
-	concat
-	frame_dig 1
-	box_put
 	retsub
 
 
-*abi_route_selectWinnerAndDistribute:
+*abi_route_distributePot:
+
+	txna ApplicationArgs 2
+	btoi
+
 
 	txna ApplicationArgs 1
 	dup
@@ -479,17 +320,17 @@ submitBid:
 	assert
 
 
-	callsub selectWinnerAndDistribute
+	callsub distributePot
 	int 1
 	return
 
 
-selectWinnerAndDistribute:
-	proto 1 0
+distributePot:
+	proto 2 0
 
 
 	byte 0x
-	dupn 5
+	dupn 2
 
 
 
@@ -497,112 +338,43 @@ selectWinnerAndDistribute:
 	byte 0x6d616e61676572
 	app_global_get
 	==
-
-
 	assert
 
 
 
 	byte 0x6973416374697665
 	app_global_get
-	int 0
-	getbit
-
-
+	int 1
+	==
 	assert
 
 
 
-	byte 0x6d
-	frame_dig -1
-	concat
+	byte 0x6368697456616c7565
+	app_global_get
+	frame_dig -2
+	*
+	int 100
+	/
 	frame_bury 0
 
 
 
-	store 255
-	load 255
-	extract 0 32
-	frame_dig -1
-	==
-
-
-	assert
-
-
-
-	store 255
-	load 255
-	int 320
-	getbit
-	!
-
-
-	assert
-
-
-
-	byte 0x62
-	frame_dig -1
-	concat
+	byte 0x6368697456616c7565
+	app_global_get
+	frame_dig 0
+	-
 	frame_bury 1
 
 
 
-	int 0
-	int 32
-	byte 0x62
-	frame_dig -1
-	concat
-	cover 2
-	box_extract
-	frame_dig -1
-	==
-
-
-	assert
-
-
-
-	byte 0x6368697456616c7565
-	app_global_get
-	int 32
-	int 8
-	byte 0x62
-	frame_dig -1
-	concat
-	cover 2
-	box_extract
-	btoi
-	*
-	int 100
-	/
-	frame_bury 2
-
-
-
-	byte 0x6368697456616c7565
-	app_global_get
-	frame_dig 2
-	-
-	frame_bury 3
-
-
-
-	frame_dig 2
+	frame_dig 0
 	byte 0x6d616e61676572436f6d6d697373696f6e50657263656e74
 	app_global_get
 	*
 	int 100
 	/
-	frame_bury 4
-
-
-
-	frame_dig 2
-	frame_dig 4
-	-
-	frame_bury 5
+	frame_bury 2
 
 
 
@@ -620,7 +392,7 @@ selectWinnerAndDistribute:
 
 
 
-	frame_dig 3
+	frame_dig 1
 	itxn_field Amount
 
 
@@ -633,7 +405,7 @@ selectWinnerAndDistribute:
 
 
 
-	frame_dig 4
+	frame_dig 2
 	int 0
 	>
 	bz *if0_end
@@ -656,7 +428,7 @@ selectWinnerAndDistribute:
 
 
 
-	frame_dig 4
+	frame_dig 2
 	itxn_field Amount
 
 
@@ -667,33 +439,6 @@ selectWinnerAndDistribute:
 	itxn_submit
 
 *if0_end:
-
-
-	store 255
-	load 255
-	int 320
-	int 1
-	setbit
-	frame_dig 0
-	cover 2
-	box_replace
-
-
-
-	byte 0x6d
-	frame_dig -1
-	concat
-	frame_dig 0
-	box_get
-
-
-	assert
-	box_put
-
-
-
-	callsub clearBids
-
 
 
 	byte 0x63757272656e744d6f6e7468
@@ -718,55 +463,9 @@ selectWinnerAndDistribute:
 
 	byte 0x6973416374697665
 	int 0
-	byte 0x00
-	int 0
-	uncover 2
-	setbit
 	app_global_put
 
 *if1_end:
-	retsub
-
-
-clearBids:
-	proto 0 0
-	retsub
-
-
-*abi_route_getMemberDetails:
-
-	byte 0x151f7c75
-
-
-	txna ApplicationArgs 1
-	dup
-	len
-	int 32
-	==
-
-
-	assert
-
-
-	callsub getMemberDetails
-	concat
-	log
-	int 1
-	return
-
-
-getMemberDetails:
-	proto 1 1
-
-
-
-	byte 0x6d
-	frame_dig -1
-	concat
-	box_get
-
-
-	assert
 	retsub
 
 
@@ -799,10 +498,7 @@ getCurrentMonth:
 
 
 	callsub getChitStatus
-	byte 0x00
-	int 0
-	uncover 2
-	setbit
+	itob
 	concat
 	log
 	int 1
@@ -816,8 +512,6 @@ getChitStatus:
 
 	byte 0x6973416374697665
 	app_global_get
-	int 0
-	getbit
 	retsub
 
 
@@ -837,18 +531,12 @@ pauseChit:
 	byte 0x6d616e61676572
 	app_global_get
 	==
-
-
 	assert
 
 
 
 	byte 0x6973416374697665
 	int 0
-	byte 0x00
-	int 0
-	uncover 2
-	setbit
 	app_global_put
 	retsub
 
@@ -869,18 +557,12 @@ resumeChit:
 	byte 0x6d616e61676572
 	app_global_get
 	==
-
-
 	assert
 
 
 
 	byte 0x6973416374697665
 	int 1
-	byte 0x00
-	int 0
-	uncover 2
-	setbit
 	app_global_put
 	retsub
 
@@ -894,17 +576,17 @@ resumeChit:
 
 *call_NoOp:
 	method "addMember(address)void"
+	method "removeMember(address)void"
 	method "startChit()void"
 	method "contribute()void"
 	method "submitBid(uint64)void"
-	method "selectWinnerAndDistribute(address)void"
-	method "getMemberDetails(address)(address,uint64,bool,uint64)"
+	method "distributePot(address,uint64)void"
 	method "getCurrentMonth()uint64"
-	method "getChitStatus()bool"
+	method "getChitStatus()uint64"
 	method "pauseChit()void"
 	method "resumeChit()void"
 	txna ApplicationArgs 0
-	match *abi_route_addMember *abi_route_startChit *abi_route_contribute *abi_route_submitBid *abi_route_selectWinnerAndDistribute *abi_route_getMemberDetails *abi_route_getCurrentMonth *abi_route_getChitStatus *abi_route_pauseChit *abi_route_resumeChit
+	match *abi_route_addMember *abi_route_removeMember *abi_route_startChit *abi_route_contribute *abi_route_submitBid *abi_route_distributePot *abi_route_getCurrentMonth *abi_route_getChitStatus *abi_route_pauseChit *abi_route_resumeChit
 
 
 	err
