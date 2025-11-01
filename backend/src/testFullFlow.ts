@@ -42,33 +42,35 @@ async function runFullTest() {
 
   try {
     // Step 1: Add members
-    console.log('📝 Step 1: Adding Members to Chit Fund');
+    console.log('📝 Step 1: Adding Members');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     
     const addResult1 = await service.addMember(managerAccount, addr1);
-    console.log('✅ Added Member 1 - TX:', addResult1.txId);
+    console.log('✅ Account 1 Added - TX:', addResult1.txId);
     
     const addResult2 = await service.addMember(managerAccount, addr2);
-    console.log('✅ Added Member 2 - TX:', addResult2.txId);
+    console.log('✅ Account 2 Added - TX:', addResult2.txId);
     console.log('');
 
-    // Step 2: Resume chit fund
-    console.log('▶️  Step 2: Resuming Chit Fund');
+    // Step 2: Start chit fund
+    console.log('▶️  Step 2: Starting Chit Fund');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    const resumeResult = await service.resumeChit(managerAccount);
-    console.log('✅ Chit Resumed - TX:', resumeResult.txId);
+    const startResult = await service.startChit(managerAccount);
+    console.log('✅ Chit Started - TX:', startResult.txId);
     console.log('');
 
     // Step 3: Contribute
     console.log('💸 Step 3: Members Contributing');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    const contributionAmount = 10_000_000; // 10 ALGO
+      // Configuration
+  const appId = Number(process.env.APP_ID);
+  const contributionAmount = 100_000; // 0.1 ALGO (must match contract's monthlyContribution)
 
     const contributeResult1 = await service.contribute(account1, contributionAmount);
-    console.log('✅ Account 1 Contributed 10 ALGO - TX:', contributeResult1.txId);
+    console.log('✅ Account 1 Contributed 0.1 ALGO - TX:', contributeResult1.txId);
 
     const contributeResult2 = await service.contribute(account2, contributionAmount);
-    console.log('✅ Account 2 Contributed 10 ALGO - TX:', contributeResult2.txId);
+    console.log('✅ Account 2 Contributed 0.1 ALGO - TX:', contributeResult2.txId);
     console.log('');
 
     // Check contract balance
@@ -102,7 +104,7 @@ async function runFullTest() {
     console.log('🏆 Step 6: Selecting Winner and Distributing Pot');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     
-    const memberAddresses = [account1.addr, account2.addr];
+    const memberAddresses = [addr1, addr2];
     const winner = bids[0]; // Highest bidder
     
     console.log('Winner:', winner.address);
@@ -121,8 +123,8 @@ async function runFullTest() {
     // Step 7: Check final balances
     console.log('💰 Final Balances:');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    const bal1Final = await algodClient.accountInformation(account1.addr).do();
-    const bal2Final = await algodClient.accountInformation(account2.addr).do();
+    const bal1Final = await algodClient.accountInformation(addr1).do();
+    const bal2Final = await algodClient.accountInformation(addr2).do();
     const appInfoFinal = await algodClient.accountInformation(appAddress).do();
 
     console.log('Account 1:', (Number(bal1Final.amount) / 1_000_000).toFixed(3), 'ALGO',
