@@ -32,7 +32,7 @@ async function deployChitFundFull() {
   console.log('\n📝 Compiling smart contract...');
   const approvalCompiled = await algodClient.compile(approvalProgram).do();
   const clearCompiled = await algodClient.compile(clearProgram).do();
-  const monthlyContribution = 10_000_000;
+  const monthlyContribution = 100_000; // 0.1 ALGO
   const commissionPercent = 5;
   const totalMembers = 10;
   console.log('\n=== Deployment Parameters ===');
