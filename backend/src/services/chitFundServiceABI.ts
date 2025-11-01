@@ -34,7 +34,7 @@ export class ChitFundServiceABI {
       ...suggestedParams
     };
     modifiedParams.flatFee = true;
-    modifiedParams.fee = suggestedParams.fee + boxMBR;
+    modifiedParams.fee = BigInt(suggestedParams.fee) + BigInt(boxMBR);
     atc.addMethodCall({
       appID: this.appId,
       method: this.getMethod('addMember'),
@@ -95,8 +95,13 @@ export class ChitFundServiceABI {
   async contribute(userAccount: algosdk.Account, amount: number) {
     const suggestedParams = await this.algodClient.getTransactionParams().do();
     const atc = new algosdk.AtomicTransactionComposer();
-    const paymentTxn = algosdk.makePaymentTxnWithSuggestedParams(userAccount.addr, algosdk.getApplicationAddress(this.appId), amount, undefined, undefined, suggestedParams);
-    const boxName = new Uint8Array(Buffer.concat([Buffer.from('m'), algosdk.decodeAddress(userAccount.addr).publicKey]));
+    const paymentTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
+      sender: userAccount.addr,
+      receiver: algosdk.getApplicationAddress(this.appId),
+      amount,
+      suggestedParams
+    });
+    const boxName = new Uint8Array(Buffer.concat([Buffer.from('m'), algosdk.decodeAddress(userAccount.addr.toString()).publicKey]));
     atc.addTransaction({
       txn: paymentTxn,
       signer: algosdk.makeBasicAccountTransactionSigner(userAccount)
@@ -122,8 +127,8 @@ export class ChitFundServiceABI {
   async submitBid(userAccount: algosdk.Account, discountPercent: number) {
     const suggestedParams = await this.algodClient.getTransactionParams().do();
     const atc = new algosdk.AtomicTransactionComposer();
-    const memberBoxName = new Uint8Array(Buffer.concat([Buffer.from('m'), algosdk.decodeAddress(userAccount.addr).publicKey]));
-    const bidBoxName = new Uint8Array(Buffer.concat([Buffer.from('b'), algosdk.decodeAddress(userAccount.addr).publicKey]));
+    const memberBoxName = new Uint8Array(Buffer.concat([Buffer.from('m'), algosdk.decodeAddress(userAccount.addr.toString()).publicKey]));
+    const bidBoxName = new Uint8Array(Buffer.concat([Buffer.from('b'), algosdk.decodeAddress(userAccount.addr.toString()).publicKey]));
     const discountPercentUint64 = Math.floor(discountPercent);
     atc.addMethodCall({
       appID: this.appId,
@@ -157,7 +162,7 @@ export class ChitFundServiceABI {
     
     const numInnerTxns = 1 + 1 + memberAddresses.filter(addr => addr !== winnerAddress).length;
     const feePerTxn = 1000;
-    suggestedParams.fee = feePerTxn * (1 + numInnerTxns);
+    suggestedParams.fee = BigInt(feePerTxn * (1 + numInnerTxns));
     
     console.log('Number of inner txns expected:', numInnerTxns);
     console.log('Total fee set:', suggestedParams.fee, 'microAlgos');
@@ -186,7 +191,7 @@ export class ChitFundServiceABI {
     console.log('Total fee:', suggestedParams.fee, 'microAlgos');
     
     const txn = algosdk.makeApplicationNoOpTxnFromObject({
-      from: managerAccount.addr,
+      sender: managerAccount.addr,
       appIndex: this.appId,
       appArgs: encodedArgs,
       accounts: foreignAccounts,
@@ -198,7 +203,7 @@ export class ChitFundServiceABI {
     });
     
     const signedTxn = txn.signTxn(managerAccount.sk);
-    const { txId } = await this.algodClient.sendRawTransaction(signedTxn).do();
+    const { txid: txId } = await this.algodClient.sendRawTransaction(signedTxn).do();
     await algosdk.waitForConfirmation(this.algodClient, txId, 4);
     
     return {
@@ -311,14 +316,12 @@ export class ChitFundServiceABI {
       .do();
     const map = new Map<string, { address: string; discountPercent: number; round: number }>();
     for (const t of txns.transactions || []) {
-      const appCall = t['application-transaction'];
-      if (!appCall || !Array.isArray(appCall['application-args']) || appCall['application-args'].length < 2) continue;
-      const a0b64 = appCall['application-args'][0];
-      const a1b64 = appCall['application-args'][1];
-      if (!a0b64 || !a1b64) continue;
-      const a0 = Buffer.from(a0b64, 'base64');
-      if (a0.length !== 4 || !Buffer.from(selector).equals(a0)) continue; // not submitBid
-      const a1 = Buffer.from(a1b64, 'base64');
+      const appCall = t.applicationTransaction;
+      if (!appCall || !Array.isArray(appCall.applicationArgs) || appCall.applicationArgs.length < 2) continue;
+      const a0 = appCall.applicationArgs[0];
+      const a1 = appCall.applicationArgs[1];
+      if (!a0 || !a1) continue;
+      if (a0.length !== 4 || !Buffer.from(selector).equals(Buffer.from(a0))) continue; // not submitBid
       if (a1.length !== 8) continue;
       const discount = Number(
         (BigInt(a1[0]) << 56n) |
@@ -331,7 +334,7 @@ export class ChitFundServiceABI {
         BigInt(a1[7])
       );
       const addr = t.sender as string;
-      const round = t['confirmed-round'] || 0;
+      const round = Number(t.confirmedRound || 0);
       // Keep latest bid per address
       const prev = map.get(addr);
       if (!prev || round > prev.round) {
@@ -347,14 +350,25 @@ export class ChitFundServiceABI {
     try {
       const appInfo = await this.algodClient.getApplicationByID(this.appId).do();
       const globalState: Record<string, any> = {};
-      if (appInfo.params['global-state']) {
-        appInfo.params['global-state'].forEach((item: any) => {
+      if (appInfo.params.globalState) {
+        appInfo.params.globalState.forEach((item: any) => {
           const key = Buffer.from(item.key, 'base64').toString();
           let value = item.value;
           if (value.type === 1) {
-            globalState[key] = Buffer.from(value.bytes, 'base64').toString();
+            // Handle bytes - try to decode as address if it's 32 bytes
+            const bytesValue = Buffer.from(value.bytes, 'base64');
+            if (bytesValue.length === 32) {
+              try {
+                globalState[key] = algosdk.encodeAddress(bytesValue);
+              } catch {
+                globalState[key] = bytesValue.toString('base64');
+              }
+            } else {
+              globalState[key] = bytesValue.toString();
+            }
           } else if (value.type === 2) {
-            globalState[key] = value.uint;
+            // Convert BigInt to number for JSON serialization
+            globalState[key] = typeof value.uint === 'bigint' ? Number(value.uint) : value.uint;
           }
         });
       }
@@ -362,7 +376,8 @@ export class ChitFundServiceABI {
       const appAddress = algosdk.getApplicationAddress(this.appId);
       const accountInfo = await this.algodClient.accountInformation(appAddress).do();
       globalState['appAddress'] = appAddress;
-      globalState['appBalance'] = accountInfo.amount;
+      // Convert BigInt balance to number
+      globalState['appBalance'] = typeof accountInfo.amount === 'bigint' ? Number(accountInfo.amount) : accountInfo.amount;
       return globalState;
     } catch (error) {
       throw new Error(`Failed to get app state: ${error}`);
@@ -442,7 +457,7 @@ export class ChitFundServiceABI {
   }
   async submitSignedTransaction(signedTxn: Uint8Array) {
     const {
-      txId
+      txid: txId
     } = await this.algodClient.sendRawTransaction(signedTxn).do();
     await algosdk.waitForConfirmation(this.algodClient, txId, 4);
     return {
@@ -451,7 +466,7 @@ export class ChitFundServiceABI {
   }
   async submitSignedTransactions(signedTxns: Uint8Array[]) {
     const {
-      txId
+      txid: txId
     } = await this.algodClient.sendRawTransaction(signedTxns).do();
     await algosdk.waitForConfirmation(this.algodClient, txId, 4);
     return {
