@@ -144,6 +144,16 @@ export default function ManagerPanel() {
     });
   };
 
+  const handleClearAllMembers = () => {
+    if (confirm('Are you sure you want to clear all locally tracked members? This only clears the local list, not the blockchain.')) {
+      saveMembersToStorage([]);
+      setResult({
+        success: true,
+        message: 'All locally tracked members cleared'
+      });
+    }
+  };
+
   const handleUpdateTotalMembers = async () => {
     const newTotal = parseInt(newTotalMembers);
     if (isNaN(newTotal) || newTotal <= 0) {
@@ -239,7 +249,7 @@ export default function ManagerPanel() {
       <h2 className="text-xl font-medium text-white mb-6">Manager Panel</h2>
 
       <div className="space-y-6">
-        {}
+        {/* Current Members Section */}
         <div className="border-b border-accent-700 pb-6">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-lg font-semibold text-white">
@@ -250,6 +260,14 @@ export default function ManagerPanel() {
               )}
               <span className="text-brand-300">)</span>
             </h3>
+            {members.length > 0 && (
+              <button
+                onClick={handleClearAllMembers}
+                className="btn-outline px-3 py-1 text-xs text-red-400 border-red-400 hover:bg-red-400/10"
+              >
+                Clear All
+              </button>
+            )}
           </div>
           {members.length === 0 ? <p className="text-sm text-accent-400 italic">No members added yet</p> : <div className="space-y-2 max-h-60 overflow-y-auto">
               {members.map((member, index) => <div key={index} className="p-3 bg-accent-900 rounded-lg border border-accent-700 flex items-center justify-between">

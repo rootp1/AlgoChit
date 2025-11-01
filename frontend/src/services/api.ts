@@ -1,7 +1,9 @@
 import algosdk from 'algosdk';
 import { Buffer } from 'buffer';
 import contractABI from '../ChitFundContract.arc32.json';
-const API_BASE_URL = 'http://localhost:3001/api/chitfund';
+const API_BASE_URL = (import.meta as any).env?.VITE_BACKEND_URL 
+  ? `${(import.meta as any).env.VITE_BACKEND_URL}/api/chitfund`
+  : 'https://yttric-socorro-maniacally.ngrok-free.dev/api/chitfund';
 const APP_ID = parseInt((import.meta as any).env?.VITE_APP_ID || '748490425');
 const algodClient = new algosdk.Algodv2('', 'https://testnet-api.algonode.cloud', '');
 const contract = new algosdk.ABIContract(contractABI.contract);

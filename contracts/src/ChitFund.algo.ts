@@ -44,6 +44,17 @@ export class ChitFundContract extends Contract {
     };
     this.members(memberAddress).value = member;
   }
+
+  removeMember(memberAddress: Address): void {
+    assert(this.txn.sender === this.manager.value, 'Only manager can remove members');
+    assert(!this.isActive.value, 'Cannot remove members after chit has started');
+    assert(this.members(memberAddress).exists, 'Member does not exist');
+    this.members(memberAddress).delete();
+    if (this.currentBids(memberAddress).exists) {
+      this.currentBids(memberAddress).delete();
+    }
+  }
+
   startChit(): void {
     assert(this.txn.sender === this.manager.value, 'Only manager can start chit');
     assert(!this.isActive.value, 'Chit already active');

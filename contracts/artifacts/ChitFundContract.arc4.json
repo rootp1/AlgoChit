@@ -35,6 +35,18 @@
       }
     },
     {
+      "name": "removeMember",
+      "args": [
+        {
+          "name": "memberAddress",
+          "type": "address"
+        }
+      ],
+      "returns": {
+        "type": "void"
+      }
+    },
+    {
       "name": "startChit",
       "args": [],
       "returns": {

@@ -205,12 +205,46 @@ removeMember:
 	==
 	assert
 
+	// *if0_condition
 	// src/ChitFundSimple.algo.ts:37
+	// this.members(memberAddress).exists
+	byte 0x6d // "m"
+	frame_dig -1 // memberAddress: Address
+	concat
+	box_len
+	swap
+	pop
+	bz *if0_end
+
+	// *if0_consequent
+	// src/ChitFundSimple.algo.ts:38
 	// this.members(memberAddress).delete()
 	byte 0x6d // "m"
 	frame_dig -1 // memberAddress: Address
 	concat
 	box_del
+
+*if0_end:
+	// *if1_condition
+	// src/ChitFundSimple.algo.ts:40
+	// this.bids(memberAddress).exists
+	byte 0x62 // "b"
+	frame_dig -1 // memberAddress: Address
+	concat
+	box_len
+	swap
+	pop
+	bz *if1_end
+
+	// *if1_consequent
+	// src/ChitFundSimple.algo.ts:41
+	// this.bids(memberAddress).delete()
+	byte 0x62 // "b"
+	frame_dig -1 // memberAddress: Address
+	concat
+	box_del
+
+*if1_end:
 	retsub
 
 // contribute()void
@@ -224,7 +258,7 @@ removeMember:
 contribute:
 	proto 0 0
 
-	// src/ChitFundSimple.algo.ts:41
+	// src/ChitFundSimple.algo.ts:46
 	// assert(this.isActive.value === 1)
 	byte 0x6973416374697665 // "isActive"
 	app_global_get
@@ -232,7 +266,7 @@ contribute:
 	==
 	assert
 
-	// src/ChitFundSimple.algo.ts:42
+	// src/ChitFundSimple.algo.ts:47
 	// verifyPayTxn(this.txnGroup[this.txn.groupIndex - 1], {
 	//       receiver: this.app.address,
 	//       amount: this.monthlyContribution.value
@@ -286,7 +320,7 @@ contribute:
 submitBid:
 	proto 1 0
 
-	// src/ChitFundSimple.algo.ts:48
+	// src/ChitFundSimple.algo.ts:53
 	// assert(this.isActive.value === 1)
 	byte 0x6973416374697665 // "isActive"
 	app_global_get
@@ -294,14 +328,14 @@ submitBid:
 	==
 	assert
 
-	// src/ChitFundSimple.algo.ts:49
+	// src/ChitFundSimple.algo.ts:54
 	// assert(discountPercent <= 30)
 	frame_dig -1 // discountPercent: uint64
 	int 30
 	<=
 	assert
 
-	// src/ChitFundSimple.algo.ts:50
+	// src/ChitFundSimple.algo.ts:55
 	// this.bids(this.txn.sender).value = discountPercent
 	byte 0x62 // "b"
 	txn Sender
@@ -344,7 +378,7 @@ distributePot:
 	byte 0x
 	dupn 7
 
-	// src/ChitFundSimple.algo.ts:57
+	// src/ChitFundSimple.algo.ts:62
 	// assert(this.txn.sender === this.manager.value)
 	txn Sender
 	byte 0x6d616e61676572 // "manager"
@@ -352,7 +386,7 @@ distributePot:
 	==
 	assert
 
-	// src/ChitFundSimple.algo.ts:58
+	// src/ChitFundSimple.algo.ts:63
 	// assert(this.isActive.value === 1)
 	byte 0x6973416374697665 // "isActive"
 	app_global_get
@@ -360,7 +394,7 @@ distributePot:
 	==
 	assert
 
-	// src/ChitFundSimple.algo.ts:60
+	// src/ChitFundSimple.algo.ts:65
 	// discountAmount = this.chitValue.value * discountPercent / 100
 	byte 0x6368697456616c7565 // "chitValue"
 	app_global_get
@@ -370,7 +404,7 @@ distributePot:
 	/
 	frame_bury 0 // discountAmount: uint64
 
-	// src/ChitFundSimple.algo.ts:61
+	// src/ChitFundSimple.algo.ts:66
 	// potAfterDiscount = this.chitValue.value - discountAmount
 	byte 0x6368697456616c7565 // "chitValue"
 	app_global_get
@@ -378,7 +412,7 @@ distributePot:
 	-
 	frame_bury 1 // potAfterDiscount: uint64
 
-	// src/ChitFundSimple.algo.ts:62
+	// src/ChitFundSimple.algo.ts:67
 	// commission = discountAmount * this.managerCommissionPercent.value / 100
 	frame_dig 0 // discountAmount: uint64
 	byte 0x6d616e61676572436f6d6d697373696f6e50657263656e74 // "managerCommissionPercent"
@@ -388,14 +422,14 @@ distributePot:
 	/
 	frame_bury 2 // commission: uint64
 
-	// src/ChitFundSimple.algo.ts:63
+	// src/ChitFundSimple.algo.ts:68
 	// remainingDiscount = discountAmount - commission
 	frame_dig 0 // discountAmount: uint64
 	frame_dig 2 // commission: uint64
 	-
 	frame_bury 3 // remainingDiscount: uint64
 
-	// src/ChitFundSimple.algo.ts:65
+	// src/ChitFundSimple.algo.ts:70
 	// sendPayment({
 	//       receiver: winnerAddress,
 	//       amount: potAfterDiscount
@@ -404,12 +438,12 @@ distributePot:
 	int pay
 	itxn_field TypeEnum
 
-	// src/ChitFundSimple.algo.ts:66
+	// src/ChitFundSimple.algo.ts:71
 	// receiver: winnerAddress
 	frame_dig -1 // winnerAddress: Address
 	itxn_field Receiver
 
-	// src/ChitFundSimple.algo.ts:67
+	// src/ChitFundSimple.algo.ts:72
 	// amount: potAfterDiscount
 	frame_dig 1 // potAfterDiscount: uint64
 	itxn_field Amount
@@ -421,16 +455,16 @@ distributePot:
 	// Submit inner transaction
 	itxn_submit
 
-	// *if0_condition
-	// src/ChitFundSimple.algo.ts:70
+	// *if2_condition
+	// src/ChitFundSimple.algo.ts:75
 	// commission > 0
 	frame_dig 2 // commission: uint64
 	int 0
 	>
-	bz *if0_end
+	bz *if2_end
 
-	// *if0_consequent
-	// src/ChitFundSimple.algo.ts:71
+	// *if2_consequent
+	// src/ChitFundSimple.algo.ts:76
 	// sendPayment({
 	//         receiver: this.manager.value,
 	//         amount: commission
@@ -439,13 +473,13 @@ distributePot:
 	int pay
 	itxn_field TypeEnum
 
-	// src/ChitFundSimple.algo.ts:72
+	// src/ChitFundSimple.algo.ts:77
 	// receiver: this.manager.value
 	byte 0x6d616e61676572 // "manager"
 	app_global_get
 	itxn_field Receiver
 
-	// src/ChitFundSimple.algo.ts:73
+	// src/ChitFundSimple.algo.ts:78
 	// amount: commission
 	frame_dig 2 // commission: uint64
 	itxn_field Amount
@@ -457,9 +491,9 @@ distributePot:
 	// Submit inner transaction
 	itxn_submit
 
-*if0_end:
-	// *if1_condition
-	// src/ChitFundSimple.algo.ts:77
+*if2_end:
+	// *if3_condition
+	// src/ChitFundSimple.algo.ts:82
 	// remainingDiscount > 0 && memberAddresses.length > 0
 	frame_dig 3 // remainingDiscount: uint64
 	int 0
@@ -475,21 +509,21 @@ distributePot:
 	&&
 
 *skip_and0:
-	bz *if1_end
+	bz *if3_end
 
-	// *if1_consequent
-	// src/ChitFundSimple.algo.ts:78
+	// *if3_consequent
+	// src/ChitFundSimple.algo.ts:83
 	// nonWinnerCount: uint64 = 0
 	int 0
 	frame_bury 4 // nonWinnerCount: uint64
 
-	// src/ChitFundSimple.algo.ts:79
+	// src/ChitFundSimple.algo.ts:84
 	// for (let i = 0; i < memberAddresses.length; i = i + 1)
 	int 0
 	frame_bury 5 // i: uint64
 
 *for_0:
-	// src/ChitFundSimple.algo.ts:79
+	// src/ChitFundSimple.algo.ts:84
 	// i < memberAddresses.length
 	frame_dig 5 // i: uint64
 	frame_dig -3 // memberAddresses: Address[]
@@ -499,83 +533,13 @@ distributePot:
 	<
 	bz *for_0_end
 
-	// *if2_condition
-	// src/ChitFundSimple.algo.ts:80
-	// memberAddresses[i] !== winnerAddress
-	frame_dig -3 // memberAddresses: Address[]
-	store 255 // full array
-	int 0 // initial offset
-	frame_dig 5 // i: uint64
-	int 32
-	* // acc * typeLength
-	+
-	load 255 // full array
-	swap
-	int 32
-	extract3
-	frame_dig -1 // winnerAddress: Address
-	!=
-	bz *if2_end
-
-	// *if2_consequent
-	// src/ChitFundSimple.algo.ts:81
-	// nonWinnerCount = nonWinnerCount + 1
-	frame_dig 4 // nonWinnerCount: uint64
-	int 1
-	+
-	frame_bury 4 // nonWinnerCount: uint64
-
-*if2_end:
-
-*for_0_continue:
-	// src/ChitFundSimple.algo.ts:79
-	// i = i + 1
-	frame_dig 5 // i: uint64
-	int 1
-	+
-	frame_bury 5 // i: uint64
-	b *for_0
-
-*for_0_end:
-	// *if3_condition
-	// src/ChitFundSimple.algo.ts:85
-	// nonWinnerCount > 0
-	frame_dig 4 // nonWinnerCount: uint64
-	int 0
-	>
-	bz *if3_end
-
-	// *if3_consequent
-	// src/ChitFundSimple.algo.ts:86
-	// perMemberShare = remainingDiscount / nonWinnerCount
-	frame_dig 3 // remainingDiscount: uint64
-	frame_dig 4 // nonWinnerCount: uint64
-	/
-	frame_bury 6 // perMemberShare: uint64
-
-	// src/ChitFundSimple.algo.ts:88
-	// for (let i = 0; i < memberAddresses.length; i = i + 1)
-	int 0
-	frame_bury 7 // i: uint64
-
-*for_1:
-	// src/ChitFundSimple.algo.ts:88
-	// i < memberAddresses.length
-	frame_dig 7 // i: uint64
-	frame_dig -3 // memberAddresses: Address[]
-	len
-	int 32
-	/
-	<
-	bz *for_1_end
-
 	// *if4_condition
-	// src/ChitFundSimple.algo.ts:89
+	// src/ChitFundSimple.algo.ts:85
 	// memberAddresses[i] !== winnerAddress
 	frame_dig -3 // memberAddresses: Address[]
 	store 255 // full array
 	int 0 // initial offset
-	frame_dig 7 // i: uint64
+	frame_dig 5 // i: uint64
 	int 32
 	* // acc * typeLength
 	+
@@ -588,7 +552,77 @@ distributePot:
 	bz *if4_end
 
 	// *if4_consequent
+	// src/ChitFundSimple.algo.ts:86
+	// nonWinnerCount = nonWinnerCount + 1
+	frame_dig 4 // nonWinnerCount: uint64
+	int 1
+	+
+	frame_bury 4 // nonWinnerCount: uint64
+
+*if4_end:
+
+*for_0_continue:
+	// src/ChitFundSimple.algo.ts:84
+	// i = i + 1
+	frame_dig 5 // i: uint64
+	int 1
+	+
+	frame_bury 5 // i: uint64
+	b *for_0
+
+*for_0_end:
+	// *if5_condition
 	// src/ChitFundSimple.algo.ts:90
+	// nonWinnerCount > 0
+	frame_dig 4 // nonWinnerCount: uint64
+	int 0
+	>
+	bz *if5_end
+
+	// *if5_consequent
+	// src/ChitFundSimple.algo.ts:91
+	// perMemberShare = remainingDiscount / nonWinnerCount
+	frame_dig 3 // remainingDiscount: uint64
+	frame_dig 4 // nonWinnerCount: uint64
+	/
+	frame_bury 6 // perMemberShare: uint64
+
+	// src/ChitFundSimple.algo.ts:93
+	// for (let i = 0; i < memberAddresses.length; i = i + 1)
+	int 0
+	frame_bury 7 // i: uint64
+
+*for_1:
+	// src/ChitFundSimple.algo.ts:93
+	// i < memberAddresses.length
+	frame_dig 7 // i: uint64
+	frame_dig -3 // memberAddresses: Address[]
+	len
+	int 32
+	/
+	<
+	bz *for_1_end
+
+	// *if6_condition
+	// src/ChitFundSimple.algo.ts:94
+	// memberAddresses[i] !== winnerAddress
+	frame_dig -3 // memberAddresses: Address[]
+	store 255 // full array
+	int 0 // initial offset
+	frame_dig 7 // i: uint64
+	int 32
+	* // acc * typeLength
+	+
+	load 255 // full array
+	swap
+	int 32
+	extract3
+	frame_dig -1 // winnerAddress: Address
+	!=
+	bz *if6_end
+
+	// *if6_consequent
+	// src/ChitFundSimple.algo.ts:95
 	// sendPayment({
 	//               receiver: memberAddresses[i],
 	//               amount: perMemberShare
@@ -597,7 +631,7 @@ distributePot:
 	int pay
 	itxn_field TypeEnum
 
-	// src/ChitFundSimple.algo.ts:91
+	// src/ChitFundSimple.algo.ts:96
 	// receiver: memberAddresses[i]
 	frame_dig -3 // memberAddresses: Address[]
 	store 255 // full array
@@ -612,7 +646,7 @@ distributePot:
 	extract3
 	itxn_field Receiver
 
-	// src/ChitFundSimple.algo.ts:92
+	// src/ChitFundSimple.algo.ts:97
 	// amount: perMemberShare
 	frame_dig 6 // perMemberShare: uint64
 	itxn_field Amount
@@ -624,10 +658,10 @@ distributePot:
 	// Submit inner transaction
 	itxn_submit
 
-*if4_end:
+*if6_end:
 
 *for_1_continue:
-	// src/ChitFundSimple.algo.ts:88
+	// src/ChitFundSimple.algo.ts:93
 	// i = i + 1
 	frame_dig 7 // i: uint64
 	int 1
@@ -637,10 +671,10 @@ distributePot:
 
 *for_1_end:
 
-*if3_end:
+*if5_end:
 
-*if1_end:
-	// src/ChitFundSimple.algo.ts:99
+*if3_end:
+	// src/ChitFundSimple.algo.ts:104
 	// this.currentMonth.value = this.currentMonth.value + 1
 	byte 0x63757272656e744d6f6e7468 // "currentMonth"
 	dup
@@ -649,24 +683,24 @@ distributePot:
 	+
 	app_global_put
 
-	// *if5_condition
-	// src/ChitFundSimple.algo.ts:100
+	// *if7_condition
+	// src/ChitFundSimple.algo.ts:105
 	// this.currentMonth.value > this.totalMembers.value
 	byte 0x63757272656e744d6f6e7468 // "currentMonth"
 	app_global_get
 	byte 0x746f74616c4d656d62657273 // "totalMembers"
 	app_global_get
 	>
-	bz *if5_end
+	bz *if7_end
 
-	// *if5_consequent
-	// src/ChitFundSimple.algo.ts:101
+	// *if7_consequent
+	// src/ChitFundSimple.algo.ts:106
 	// this.isActive.value = 0
 	byte 0x6973416374697665 // "isActive"
 	int 0
 	app_global_put
 
-*if5_end:
+*if7_end:
 	retsub
 
 // getCurrentMonth()uint64
@@ -686,7 +720,7 @@ distributePot:
 getCurrentMonth:
 	proto 0 1
 
-	// src/ChitFundSimple.algo.ts:105
+	// src/ChitFundSimple.algo.ts:110
 	// return this.currentMonth.value;
 	byte 0x63757272656e744d6f6e7468 // "currentMonth"
 	app_global_get
@@ -709,7 +743,7 @@ getCurrentMonth:
 getChitStatus:
 	proto 0 1
 
-	// src/ChitFundSimple.algo.ts:108
+	// src/ChitFundSimple.algo.ts:113
 	// return this.isActive.value;
 	byte 0x6973416374697665 // "isActive"
 	app_global_get
@@ -726,7 +760,7 @@ getChitStatus:
 pauseChit:
 	proto 0 0
 
-	// src/ChitFundSimple.algo.ts:111
+	// src/ChitFundSimple.algo.ts:116
 	// assert(this.txn.sender === this.manager.value)
 	txn Sender
 	byte 0x6d616e61676572 // "manager"
@@ -734,7 +768,7 @@ pauseChit:
 	==
 	assert
 
-	// src/ChitFundSimple.algo.ts:112
+	// src/ChitFundSimple.algo.ts:117
 	// this.isActive.value = 0
 	byte 0x6973416374697665 // "isActive"
 	int 0
@@ -752,7 +786,7 @@ pauseChit:
 resumeChit:
 	proto 0 0
 
-	// src/ChitFundSimple.algo.ts:115
+	// src/ChitFundSimple.algo.ts:120
 	// assert(this.txn.sender === this.manager.value)
 	txn Sender
 	byte 0x6d616e61676572 // "manager"
@@ -760,7 +794,7 @@ resumeChit:
 	==
 	assert
 
-	// src/ChitFundSimple.algo.ts:116
+	// src/ChitFundSimple.algo.ts:121
 	// this.isActive.value = 1
 	byte 0x6973416374697665 // "isActive"
 	int 1
@@ -782,7 +816,7 @@ resumeChit:
 updateTotalMembers:
 	proto 1 0
 
-	// src/ChitFundSimple.algo.ts:119
+	// src/ChitFundSimple.algo.ts:124
 	// assert(this.txn.sender === this.manager.value)
 	txn Sender
 	byte 0x6d616e61676572 // "manager"
@@ -790,20 +824,20 @@ updateTotalMembers:
 	==
 	assert
 
-	// src/ChitFundSimple.algo.ts:120
+	// src/ChitFundSimple.algo.ts:125
 	// assert(newTotal > 0)
 	frame_dig -1 // newTotal: uint64
 	int 0
 	>
 	assert
 
-	// src/ChitFundSimple.algo.ts:121
+	// src/ChitFundSimple.algo.ts:126
 	// this.totalMembers.value = newTotal
 	byte 0x746f74616c4d656d62657273 // "totalMembers"
 	frame_dig -1 // newTotal: uint64
 	app_global_put
 
-	// src/ChitFundSimple.algo.ts:122
+	// src/ChitFundSimple.algo.ts:127
 	// this.chitValue.value = this.monthlyContribution.value * newTotal
 	byte 0x6368697456616c7565 // "chitValue"
 	byte 0x6d6f6e74686c79436f6e747269627574696f6e // "monthlyContribution"

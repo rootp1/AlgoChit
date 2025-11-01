@@ -34,7 +34,12 @@ export class ChitFundSimple extends Contract {
   removeMember(memberAddress: Address): void {
     assert(this.txn.sender === this.manager.value);
     assert(this.isActive.value === 0);
-    this.members(memberAddress).delete();
+    if (this.members(memberAddress).exists) {
+      this.members(memberAddress).delete();
+    }
+    if (this.bids(memberAddress).exists) {
+      this.bids(memberAddress).delete();
+    }
   }
 
   contribute(): void {
