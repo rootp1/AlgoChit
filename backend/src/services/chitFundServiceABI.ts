@@ -34,9 +34,9 @@ export class ChitFundServiceABI {
       ...suggestedParams
     };
     modifiedParams.flatFee = true;
-    // Properly handle BigInt fee
-    const baseFee = typeof suggestedParams.fee === 'bigint' ? suggestedParams.fee : BigInt(suggestedParams.fee);
-    modifiedParams.fee = baseFee + BigInt(boxMBR);
+    // Use minFee (1000) + box MBR cost
+    const minFee = typeof suggestedParams.minFee === 'bigint' ? suggestedParams.minFee : BigInt(suggestedParams.minFee || 1000);
+    modifiedParams.fee = minFee + BigInt(boxMBR);
     atc.addMethodCall({
       appID: this.appId,
       method: this.getMethod('addMember'),
