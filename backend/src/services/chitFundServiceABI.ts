@@ -81,7 +81,9 @@ export class ChitFundServiceABI {
   async removeMember(managerAccount: algosdk.Account, memberAddress: string) {
     const suggestedParams = await this.algodClient.getTransactionParams().do();
     const atc = new algosdk.AtomicTransactionComposer();
-    const boxName = new Uint8Array(Buffer.concat([Buffer.from('m'), algosdk.decodeAddress(memberAddress).publicKey]));
+    const memberBoxName = new Uint8Array(Buffer.concat([Buffer.from('m'), algosdk.decodeAddress(memberAddress).publicKey]));
+    const bidBoxName = new Uint8Array(Buffer.concat([Buffer.from('b'), algosdk.decodeAddress(memberAddress).publicKey]));
+    
     atc.addMethodCall({
       appID: this.appId,
       method: this.getMethod('removeMember'),
@@ -91,7 +93,10 @@ export class ChitFundServiceABI {
       suggestedParams,
       boxes: [{
         appIndex: this.appId,
-        name: boxName
+        name: memberBoxName
+      }, {
+        appIndex: this.appId,
+        name: bidBoxName
       }]
     });
     const result = await atc.execute(this.algodClient, 4);
@@ -121,8 +126,8 @@ export class ChitFundServiceABI {
     const suggestedParams = await this.algodClient.getTransactionParams().do();
     const atc = new algosdk.AtomicTransactionComposer();
     const paymentTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-      sender: userAccount.addr,
-      receiver: algosdk.getApplicationAddress(this.appId),
+      from: userAccount.addr,
+      to: algosdk.getApplicationAddress(this.appId),
       amount,
       suggestedParams
     });
@@ -154,6 +159,24 @@ export class ChitFundServiceABI {
     const atc = new algosdk.AtomicTransactionComposer();
     const memberBoxName = new Uint8Array(Buffer.concat([Buffer.from('m'), algosdk.decodeAddress(userAccount.addr.toString()).publicKey]));
     const bidBoxName = new Uint8Array(Buffer.concat([Buffer.from('b'), algosdk.decodeAddress(userAccount.addr.toString()).publicKey]));
+    
+    // Calculate box MBR for bid box (33 bytes for box name + 8 bytes for uint64 value)
+    const boxMBR = 2500 + 400 * (33 + 8);
+    let minFee = 1000;
+    if (suggestedParams.minFee !== undefined && suggestedParams.minFee !== null) {
+      const minFeeValue = typeof suggestedParams.minFee === 'bigint' ? Number(suggestedParams.minFee) : Number(suggestedParams.minFee);
+      if (!isNaN(minFeeValue) && minFeeValue > 0) {
+        minFee = minFeeValue;
+      }
+    }
+    const totalFee = minFee + boxMBR;
+    
+    const txnParams = {
+      ...suggestedParams,
+      flatFee: true,
+      fee: totalFee
+    };
+    
     const discountPercentUint64 = Math.floor(discountPercent);
     atc.addMethodCall({
       appID: this.appId,
@@ -161,7 +184,7 @@ export class ChitFundServiceABI {
       methodArgs: [discountPercentUint64],
       sender: userAccount.addr,
       signer: algosdk.makeBasicAccountTransactionSigner(userAccount),
-      suggestedParams,
+      suggestedParams: txnParams,
       boxes: [{
         appIndex: this.appId,
         name: memberBoxName
@@ -192,8 +215,22 @@ export class ChitFundServiceABI {
     console.log('Number of inner txns expected:', numInnerTxns);
     console.log('Total fee set:', suggestedParams.fee, 'microAlgos');
     
-    const memberBoxName = new Uint8Array(Buffer.concat([Buffer.from('m'), algosdk.decodeAddress(winnerAddress).publicKey]));
-    const bidBoxName = new Uint8Array(Buffer.concat([Buffer.from('b'), algosdk.decodeAddress(winnerAddress).publicKey]));
+    const winnerMemberBoxName = new Uint8Array(Buffer.concat([Buffer.from('m'), algosdk.decodeAddress(winnerAddress).publicKey]));
+    const winnerBidBoxName = new Uint8Array(Buffer.concat([Buffer.from('b'), algosdk.decodeAddress(winnerAddress).publicKey]));
+    
+    // Include box references for all members if the contract needs to update them
+    const allBoxes: Array<{ appIndex: number; name: Uint8Array }> = [
+      { appIndex: this.appId, name: winnerMemberBoxName },
+      { appIndex: this.appId, name: winnerBidBoxName }
+    ];
+    
+    // Add member boxes for all participants (in case contract updates contribution tracking)
+    for (const memberAddr of memberAddresses) {
+      if (memberAddr !== winnerAddress) {
+        const memberBox = new Uint8Array(Buffer.concat([Buffer.from('m'), algosdk.decodeAddress(memberAddr).publicKey]));
+        allBoxes.push({ appIndex: this.appId, name: memberBox });
+      }
+    }
     
     const method = this.getMethod('distributePot');
     const methodSelector = method.getSelector();
@@ -214,16 +251,14 @@ export class ChitFundServiceABI {
     console.log('Foreign accounts (for inner txns):', foreignAccounts);
     console.log('Fee multiplier:', Math.max(3, numInnerTxns));
     console.log('Total fee:', suggestedParams.fee, 'microAlgos');
+    console.log('Box references:', allBoxes.length);
     
     const txn = algosdk.makeApplicationNoOpTxnFromObject({
-      sender: managerAccount.addr,
+      from: managerAccount.addr,
       appIndex: this.appId,
       appArgs: encodedArgs,
       accounts: foreignAccounts,
-      boxes: [
-        { appIndex: this.appId, name: memberBoxName },
-        { appIndex: this.appId, name: bidBoxName }
-      ],
+      boxes: allBoxes,
       suggestedParams
     });
     
