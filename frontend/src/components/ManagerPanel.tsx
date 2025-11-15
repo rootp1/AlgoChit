@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useWallet } from '@txnlab/use-wallet-react';
 import { api } from '../services/api';
+import { useUserRole } from '../contexts/UserRoleContext';
+
 export default function ManagerPanel() {
+  const { activeAddress } = useWallet();
+  const { isManager, managerAddress, loading: roleLoading } = useUserRole();
   const [memberAddress, setMemberAddress] = useState('');
   const [removeAddress, setRemoveAddress] = useState('');
   const [members, setMembers] = useState<string[]>([]);
@@ -16,10 +21,12 @@ export default function ManagerPanel() {
   const [newTotalMembers, setNewTotalMembers] = useState('');
 
   useEffect(() => {
-    loadMembers();
-    loadBids();
-    loadContractState();
-  }, []);
+    if (isManager) {
+      loadMembers();
+      loadBids();
+      loadContractState();
+    }
+  }, [isManager]);
 
   const loadContractState = async () => {
     try {
@@ -262,6 +269,52 @@ export default function ManagerPanel() {
       setAutoSelecting(false);
     }
   };
+  // Access control check
+  if (!activeAddress) {
+    return (
+      <div className="card p-8 text-center">
+        <div className="text-accent-300 mb-4">
+          <svg className="w-16 h-16 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+          <p className="text-lg font-medium text-white mb-2">Wallet Not Connected</p>
+          <p className="text-sm text-accent-400">Please connect your wallet to access the Manager Panel</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (roleLoading) {
+    return (
+      <div className="card p-8 text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-400 mx-auto mb-4"></div>
+        <p className="text-accent-300">Verifying permissions...</p>
+      </div>
+    );
+  }
+
+  if (!isManager) {
+    return (
+      <div className="card p-8 text-center">
+        <div className="text-red-400 mb-4">
+          <svg className="w-16 h-16 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+          </svg>
+          <p className="text-lg font-medium text-white mb-2">Access Denied</p>
+          <p className="text-sm text-accent-400 mb-4">
+            Only the manager can access this panel
+          </p>
+          {managerAddress && (
+            <div className="mt-4 p-3 bg-accent-900 border border-accent-700 rounded-lg">
+              <p className="text-xs text-accent-400 mb-1">Manager Address:</p>
+              <p className="text-xs font-mono text-white break-all">{managerAddress}</p>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return <div className="card p-6">
       <h2 className="text-xl font-medium text-white mb-6">Manager Panel</h2>
 
