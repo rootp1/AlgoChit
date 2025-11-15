@@ -7,6 +7,10 @@ export class ChitFundFull extends Contract {
   currentMonth = GlobalStateKey<uint64>();
   chitValue = GlobalStateKey<uint64>();
   isActive = GlobalStateKey<uint64>();
+  
+  members = BoxMap<Address, uint64>({ prefix: 'm' });
+  bids = BoxMap<Address, uint64>({ prefix: 'b' });
+  
   createApplication(monthlyContrib: uint64, commissionPercent: uint64, totalMembersCount: uint64): void {
     this.manager.value = this.txn.sender;
     this.monthlyContribution.value = monthlyContrib;
@@ -19,11 +23,17 @@ export class ChitFundFull extends Contract {
   addMember(memberAddress: Address): void {
     assert(this.txn.sender === this.manager.value);
     assert(this.isActive.value === 0);
-    const memberData = bzero(49);
+    this.members(memberAddress).value = 1;
   }
   removeMember(memberAddress: Address): void {
     assert(this.txn.sender === this.manager.value);
     assert(this.isActive.value === 0);
+    if (this.members(memberAddress).exists) {
+      this.members(memberAddress).delete();
+    }
+    if (this.bids(memberAddress).exists) {
+      this.bids(memberAddress).delete();
+    }
   }
   startChit(): void {
     assert(this.txn.sender === this.manager.value);
@@ -41,6 +51,7 @@ export class ChitFundFull extends Contract {
   submitBid(discountPercent: uint64): void {
     assert(this.isActive.value === 1);
     assert(discountPercent <= 30);
+    this.bids(this.txn.sender).value = discountPercent;
   }
   distributePot(winnerAddress: Address, discountPercent: uint64): void {
     assert(this.txn.sender === this.manager.value);
