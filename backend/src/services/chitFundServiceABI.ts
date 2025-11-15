@@ -30,22 +30,23 @@ export class ChitFundServiceABI {
     const atc = new algosdk.AtomicTransactionComposer();
     const boxName = new Uint8Array(Buffer.concat([Buffer.from('m'), algosdk.decodeAddress(memberAddress).publicKey]));
     const boxMBR = 2500 + 400 * (33 + 49);
-    const modifiedParams = {
-      ...suggestedParams
-    };
-    modifiedParams.flatFee = true;
+    
     // Use minFee (1000) + box MBR cost
     const minFee = typeof suggestedParams.minFee === 'bigint' ? Number(suggestedParams.minFee) : (suggestedParams.minFee || 1000);
     const totalFee = minFee + boxMBR;
     console.log('💰 Add Member Fee Calculation:', { minFee, boxMBR, totalFee });
-    modifiedParams.fee = BigInt(totalFee);
+    
+    // Directly modify the original params object
+    suggestedParams.flatFee = true;
+    suggestedParams.fee = BigInt(totalFee);
+    
     atc.addMethodCall({
       appID: this.appId,
       method: this.getMethod('addMember'),
       methodArgs: [memberAddress],
       sender: managerAccount.addr,
       signer: algosdk.makeBasicAccountTransactionSigner(managerAccount),
-      suggestedParams: modifiedParams,
+      suggestedParams,
       boxes: [{
         appIndex: this.appId,
         name: boxName
