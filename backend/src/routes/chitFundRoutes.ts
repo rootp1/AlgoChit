@@ -25,6 +25,23 @@ router.get('/state', async (req: Request, res: Response) => {
     });
   }
 });
+
+router.get('/manager', async (req: Request, res: Response) => {
+  try {
+    const state = await chitFundService.getAppState();
+    res.json({
+      success: true,
+      managerAddress: state.manager
+    });
+  } catch (error: any) {
+    console.error('Error getting manager address:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 router.post('/members/add', async (req: Request, res: Response) => {
   try {
     const {
