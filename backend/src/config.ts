@@ -16,7 +16,8 @@ export const config = {
     token: process.env.INDEXER_TOKEN !== undefined ? process.env.INDEXER_TOKEN : 'a'.repeat(64)
   },
   appId: parseInt(process.env.APP_ID || '0'),
-  managerMnemonic: process.env.MANAGER_MNEMONIC || ''
+  managerMnemonic: process.env.MANAGER_MNEMONIC || '',
+  managerAddress: process.env.MANAGER_ADDRESS || ''
 };
 export const getAlgodClient = () => {
   return new algosdk.Algodv2(config.algod.token, config.algod.server, config.algod.port);

@@ -28,10 +28,10 @@ router.get('/state', async (req: Request, res: Response) => {
 
 router.get('/manager', async (req: Request, res: Response) => {
   try {
-    const state = await chitFundService.getAppState();
+    const { config } = await import('../config.js');
     res.json({
       success: true,
-      managerAddress: state.manager
+      managerAddress: config.managerAddress
     });
   } catch (error: any) {
     console.error('Error getting manager address:', error);
