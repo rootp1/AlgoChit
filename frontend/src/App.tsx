@@ -7,8 +7,11 @@ import BidForm from './components/BidForm';
 import ManagerPanel from './components/ManagerPanel';
 import ConnectWallet from './components/ConnectWallet';
 import { walletManager } from './walletConfig';
-function App() {
+import { UserRoleProvider, useUserRole } from './contexts/UserRoleContext';
+
+function AppContent() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'contribute' | 'bid' | 'manager'>('dashboard');
+  const { isManager } = useUserRole();
   return <SnackbarProvider maxSnack={3}>
       <WalletProvider manager={walletManager}>
         <div className="min-h-screen bg-primary-900">
@@ -38,9 +41,11 @@ function App() {
                 <button onClick={() => setActiveTab('bid')} className={`px-6 py-4 text-sm font-medium transition-all border-b-2 ${activeTab === 'bid' ? 'border-brand-400 text-white bg-primary-700/60' : 'border-transparent text-accent-300 hover:text-white hover:bg-primary-700/40 hover:border-brand-700/40'}`}>
                   Submit Bid
                 </button>
-                <button onClick={() => setActiveTab('manager')} className={`px-6 py-4 text-sm font-medium transition-all border-b-2 ${activeTab === 'manager' ? 'border-brand-400 text-white bg-primary-700/60' : 'border-transparent text-accent-300 hover:text-white hover:bg-primary-700/40 hover:border-brand-700/40'}`}>
-                  Manager
-                </button>
+                {isManager && (
+                  <button onClick={() => setActiveTab('manager')} className={`px-6 py-4 text-sm font-medium transition-all border-b-2 ${activeTab === 'manager' ? 'border-brand-400 text-white bg-primary-700/60' : 'border-transparent text-accent-300 hover:text-white hover:bg-primary-700/40 hover:border-brand-700/40'}`}>
+                    Manager
+                  </button>
+                )}
               </div>
             </div>
           </nav>
@@ -50,10 +55,23 @@ function App() {
             {activeTab === 'dashboard' && <Dashboard />}
             {activeTab === 'contribute' && <ContributeForm />}
             {activeTab === 'bid' && <BidForm />}
-            {activeTab === 'manager' && <ManagerPanel />}
+            {activeTab === 'manager' && isManager && <ManagerPanel />}
           </main>
         </div>
       </WalletProvider>
     </SnackbarProvider>;
 }
+
+function App() {
+  return (
+    <SnackbarProvider maxSnack={3}>
+      <WalletProvider manager={walletManager}>
+        <UserRoleProvider>
+          <AppContent />
+        </UserRoleProvider>
+      </WalletProvider>
+    </SnackbarProvider>
+  );
+}
+
 export default App;
