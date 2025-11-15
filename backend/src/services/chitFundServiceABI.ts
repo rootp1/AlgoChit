@@ -53,9 +53,12 @@ export class ChitFundServiceABI {
       throw new Error(`Invalid fee calculated: ${totalFee}. minFee: ${minFee}, boxMBR: ${boxMBR}`);
     }
     
-    // Directly modify the original params object
-    suggestedParams.flatFee = true;
-    suggestedParams.fee = BigInt(totalFee);
+    // Create new params object with correct fee (must be number, not BigInt)
+    const txnParams = {
+      ...suggestedParams,
+      flatFee: true,
+      fee: totalFee  // Use number directly, not BigInt
+    };
     
     atc.addMethodCall({
       appID: this.appId,
@@ -63,7 +66,7 @@ export class ChitFundServiceABI {
       methodArgs: [memberAddress],
       sender: managerAccount.addr,
       signer: algosdk.makeBasicAccountTransactionSigner(managerAccount),
-      suggestedParams,
+      suggestedParams: txnParams,
       boxes: [{
         appIndex: this.appId,
         name: boxName
@@ -184,7 +187,7 @@ export class ChitFundServiceABI {
     
     const numInnerTxns = 1 + 1 + memberAddresses.filter(addr => addr !== winnerAddress).length;
     const feePerTxn = 1000;
-    suggestedParams.fee = BigInt(feePerTxn * (1 + numInnerTxns));
+    suggestedParams.fee = feePerTxn * (1 + numInnerTxns);  // Use number, not BigInt
     
     console.log('Number of inner txns expected:', numInnerTxns);
     console.log('Total fee set:', suggestedParams.fee, 'microAlgos');
