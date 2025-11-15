@@ -191,4 +191,27 @@ export const api = {
     });
     return response.json();
   },
+
+  // Get manager address from contract
+  getManagerAddress: async () => {
+    const response = await fetch(`${API_BASE_URL}/manager`);
+    return response.json();
+  },
+
+  // Check if address is a member
+  checkMembership: async (address: string) => {
+    try {
+      const response = await api.getMembers();
+      if (response.success && Array.isArray(response.members)) {
+        return {
+          isMember: response.members.includes(address),
+          members: response.members
+        };
+      }
+      return { isMember: false, members: [] };
+    } catch (error) {
+      console.error('Error checking membership:', error);
+      return { isMember: false, members: [] };
+    }
+  },
 };
