@@ -20,8 +20,8 @@ export default function WalletExample() {
       setTxnStatus('Creating transaction...');
       const suggestedParams = await algodClient.getTransactionParams().do();
       const txn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        from: activeAddress,
-        to: activeAddress,
+        sender: activeAddress,
+        receiver: activeAddress,
         amount: 1_000_000,
         suggestedParams,
         note: new TextEncoder().encode('AlgoChit test transaction')

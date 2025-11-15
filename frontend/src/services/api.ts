@@ -59,8 +59,8 @@ export const api = {
         return signed;
       };
       const paymentTxn = algosdk.makePaymentTxnWithSuggestedParamsFromObject({
-        from: senderAddress,
-        to: algosdk.getApplicationAddress(APP_ID),
+        sender: senderAddress,
+        receiver: algosdk.getApplicationAddress(APP_ID),
         amount: amount,
         suggestedParams: suggestedParams
       });
