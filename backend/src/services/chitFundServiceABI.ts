@@ -35,8 +35,10 @@ export class ChitFundServiceABI {
     };
     modifiedParams.flatFee = true;
     // Use minFee (1000) + box MBR cost
-    const minFee = typeof suggestedParams.minFee === 'bigint' ? suggestedParams.minFee : BigInt(suggestedParams.minFee || 1000);
-    modifiedParams.fee = minFee + BigInt(boxMBR);
+    const minFee = typeof suggestedParams.minFee === 'bigint' ? Number(suggestedParams.minFee) : (suggestedParams.minFee || 1000);
+    const totalFee = minFee + boxMBR;
+    console.log('💰 Add Member Fee Calculation:', { minFee, boxMBR, totalFee });
+    modifiedParams.fee = BigInt(totalFee);
     atc.addMethodCall({
       appID: this.appId,
       method: this.getMethod('addMember'),
