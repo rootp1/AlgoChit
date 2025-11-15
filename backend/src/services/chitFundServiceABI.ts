@@ -375,7 +375,7 @@ export class ChitFundServiceABI {
       // Also fetch app address and balance
       const appAddress = algosdk.getApplicationAddress(this.appId);
       const accountInfo = await this.algodClient.accountInformation(appAddress).do();
-      globalState['appAddress'] = appAddress;
+      globalState['appAddress'] = appAddress.toString(); 
       // Convert BigInt balance to number
       globalState['appBalance'] = typeof accountInfo.amount === 'bigint' ? Number(accountInfo.amount) : accountInfo.amount;
       return globalState;

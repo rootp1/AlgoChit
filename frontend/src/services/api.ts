@@ -4,7 +4,7 @@ import contractABI from '../ChitFundContract.arc32.json';
 const API_BASE_URL = (import.meta as any).env?.VITE_BACKEND_URL 
   ? `${(import.meta as any).env.VITE_BACKEND_URL}/api/chitfund`
   : 'https://yttric-socorro-maniacally.ngrok-free.dev/api/chitfund';
-const APP_ID = parseInt((import.meta as any).env?.VITE_APP_ID || '748490425');
+const APP_ID = parseInt((import.meta as any).env?.VITE_APP_ID);
 const algodClient = new algosdk.Algodv2('', 'https://testnet-api.algonode.cloud', '');
 const contract = new algosdk.ABIContract(contractABI.contract);
 const getMethod = (name: string): algosdk.ABIMethod => {
@@ -176,6 +176,11 @@ export const api = {
 
   getBids: async (limit = 100) => {
     const response = await fetch(`${API_BASE_URL}/bids?limit=${limit}`);
+    return response.json();
+  },
+
+  getMembers: async () => {
+    const response = await fetch(`${API_BASE_URL}/members`);
     return response.json();
   },
 

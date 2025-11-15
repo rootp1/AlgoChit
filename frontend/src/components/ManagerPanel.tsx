@@ -42,12 +42,27 @@ export default function ManagerPanel() {
   };
   const loadMembers = async () => {
     try {
+      // First try to load from blockchain
+      const response = await api.getMembers();
+      if (response.success && Array.isArray(response.members)) {
+        const blockchainMembers = response.members;
+        setMembers(blockchainMembers);
+        // Sync with localStorage
+        localStorage.setItem('chitMembers', JSON.stringify(blockchainMembers));
+        return;
+      }
+    } catch (error) {
+      console.error('Failed to load members from blockchain:', error);
+    }
+    
+    // Fallback to localStorage
+    try {
       const storedMembers = localStorage.getItem('chitMembers');
       if (storedMembers) {
         setMembers(JSON.parse(storedMembers));
       }
     } catch (error) {
-      console.error('Failed to load members:', error);
+      console.error('Failed to load members from localStorage:', error);
     }
   };
   const loadBids = async () => {
@@ -75,8 +90,8 @@ export default function ManagerPanel() {
       setResult(response);
       if (response.success) {
         setMemberAddress('');
-        const updatedMembers = [...members, memberAddress];
-        saveMembersToStorage(updatedMembers);
+        // Reload members from blockchain to ensure sync
+        await loadMembers();
       }
     } catch (error: any) {
       setResult({
@@ -93,11 +108,13 @@ export default function ManagerPanel() {
     try {
       const response = await api.removeMember(address);
       if (response.success) {
-        const updatedMembers = members.filter(m => m !== address);
-        saveMembersToStorage(updatedMembers);
+        // Reload members from blockchain to ensure sync
+        await loadMembers();
+        // Reload bids to reflect the deletion of the member's bid
+        await loadBids();
         setResult({
           success: true,
-          message: 'Member removed successfully from blockchain!'
+          message: 'Member and their bid removed successfully from blockchain!'
         });
         setRemoveAddress('');
       } else {

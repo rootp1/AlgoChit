@@ -178,6 +178,16 @@ router.post('/distribute/auto', async (req: Request, res: Response) => {
   }
 });
 
+// List all members from blockchain
+router.get('/members', async (req: Request, res: Response) => {
+  try {
+    const members = await chitFundService.getAllMemberAddresses();
+    res.json({ success: true, members });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 // List bids sorted by discount desc
 router.get('/bids', async (req: Request, res: Response) => {
   try {
