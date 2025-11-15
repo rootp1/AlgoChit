@@ -5,7 +5,8 @@ export const config = {
   port: parseInt(process.env.PORT || '3000'),
   algod: {
     server: process.env.ALGOD_SERVER || 'http://localhost',
-    port: process.env.ALGOD_PORT !== undefined ? process.env.ALGOD_PORT : '4001',
+    // Use 443 for https, 4001 for http
+    port: process.env.ALGOD_PORT !== undefined ? process.env.ALGOD_PORT : ((process.env.ALGOD_SERVER || '').startsWith('https://') ? '443' : '4001'),
     token: process.env.ALGOD_TOKEN !== undefined ? process.env.ALGOD_TOKEN : 'a'.repeat(64)
   },
   indexer: {
