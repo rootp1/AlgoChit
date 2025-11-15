@@ -350,9 +350,13 @@ export class ChitFundServiceABI {
     try {
       const appInfo = await this.algodClient.getApplicationByID(this.appId).do();
       const globalState: Record<string, any> = {};
+      
       console.log('📊 Raw global state items count:', appInfo.params.globalState?.length || 0);
-      if (appInfo.params.globalState) {
-        appInfo.params.globalState.forEach((item: any) => {
+      
+      const globalStateArray = appInfo.params.globalState || [];
+      
+      if (globalStateArray && globalStateArray.length > 0) {
+        globalStateArray.forEach((item: any) => {
           const key = Buffer.from(item.key, 'base64').toString();
           console.log('🔑 Processing key:', key, 'type:', item.value.type);
           let value = item.value;
@@ -374,14 +378,18 @@ export class ChitFundServiceABI {
           }
         });
       }
+      
       // Also fetch app address and balance
       const appAddress = algosdk.getApplicationAddress(this.appId);
       const accountInfo = await this.algodClient.accountInformation(appAddress).do();
       globalState['appAddress'] = appAddress.toString(); 
       // Convert BigInt balance to number
       globalState['appBalance'] = typeof accountInfo.amount === 'bigint' ? Number(accountInfo.amount) : accountInfo.amount;
+      
+      console.log('✅ Final global state keys:', Object.keys(globalState));
       return globalState;
     } catch (error) {
+      console.error('❌ Error in getAppState:', error);
       throw new Error(`Failed to get app state: ${error}`);
     }
   }
