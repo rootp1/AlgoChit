@@ -247,13 +247,22 @@ export class ChitFundServiceABI {
 
       for (const b of boxes) {
         try {
-          const nameB64 = b.name as string;
-          const nameBytes = Buffer.from(nameB64, 'base64');
+          // Box name can be Uint8Array or base64 string depending on SDK version
+          let nameBytes: Buffer;
+          if (b.name instanceof Uint8Array) {
+            nameBytes = Buffer.from(b.name);
+          } else if (typeof b.name === 'string') {
+            nameBytes = Buffer.from(b.name, 'base64');
+          } else {
+            continue;
+          }
+          
+          // Check if it's a bid box (starts with 'b' and is 33 bytes total)
           if (nameBytes.length >= 33 && nameBytes[0] === 'b'.charCodeAt(0)) {
             const pubkey = nameBytes.slice(1, 33);
-            const addr = algosdk.encodeAddress(pubkey);
+            const addr = algosdk.encodeAddress(new Uint8Array(pubkey));
 
-            const boxVal = await this.algodClient.getApplicationBoxByName(this.appId, nameBytes).do();
+            const boxVal = await this.algodClient.getApplicationBoxByName(this.appId, new Uint8Array(nameBytes)).do();
             const rawVal: any = boxVal.value;
             const valBytes = typeof rawVal === 'string' ? Buffer.from(rawVal, 'base64') : Buffer.from(rawVal);
 
@@ -273,7 +282,9 @@ export class ChitFundServiceABI {
 
             bids.push({ address: addr, discountPercent: discount });
           }
-        } catch {}
+        } catch (err) {
+          console.error('Error processing bid box:', err);
+        }
       }
 
     // Note: pagination not handled here; assumes number of boxes <= default server page size
@@ -314,14 +325,25 @@ export class ChitFundServiceABI {
       
       for (const b of boxes) {
         try {
-          const nameB64 = b.name as string;
-          const nameBytes = Buffer.from(nameB64, 'base64');
+          // Box name can be Uint8Array or base64 string depending on SDK version
+          let nameBytes: Buffer;
+          if (b.name instanceof Uint8Array) {
+            nameBytes = Buffer.from(b.name);
+          } else if (typeof b.name === 'string') {
+            nameBytes = Buffer.from(b.name, 'base64');
+          } else {
+            continue;
+          }
+          
+          // Check if it's a member box (starts with 'm' and is 33 bytes total)
           if (nameBytes.length >= 33 && nameBytes[0] === 'm'.charCodeAt(0)) {
             const pubkey = nameBytes.slice(1, 33);
-            const addr = algosdk.encodeAddress(pubkey);
+            const addr = algosdk.encodeAddress(new Uint8Array(pubkey));
             members.push(addr);
           }
-        } catch {}
+        } catch (err) {
+          console.error('Error processing box:', err);
+        }
       }
     } catch (error) {
       console.error('Error fetching member boxes:', error);
