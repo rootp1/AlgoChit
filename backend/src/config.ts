@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 import algosdk from 'algosdk';
 dotenv.config();
 export const config = {

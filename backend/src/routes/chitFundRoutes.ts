@@ -53,13 +53,20 @@ router.post('/members/add', async (req: Request, res: Response) => {
         error: 'memberAddress is required'
       });
     }
+    console.log('📝 Adding member:', memberAddress);
     const managerAccount = getManagerAccount();
     const result = await chitFundService.addMember(managerAccount, memberAddress);
+    console.log('✅ Member added successfully:', result);
     res.json({
       success: true,
       result
     });
   } catch (error: any) {
+    console.error('❌ Error adding member:', {
+      message: error.message,
+      stack: error.stack,
+      memberAddress: req.body.memberAddress
+    });
     res.status(500).json({
       success: false,
       error: error.message

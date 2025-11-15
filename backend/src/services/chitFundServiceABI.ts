@@ -31,10 +31,27 @@ export class ChitFundServiceABI {
     const boxName = new Uint8Array(Buffer.concat([Buffer.from('m'), algosdk.decodeAddress(memberAddress).publicKey]));
     const boxMBR = 2500 + 400 * (33 + 49);
     
-    // Use minFee (1000) + box MBR cost
-    const minFee = typeof suggestedParams.minFee === 'bigint' ? Number(suggestedParams.minFee) : (suggestedParams.minFee || 1000);
+    // Use minFee (1000) + box MBR cost - ensure we always have a valid number
+    let minFee = 1000; // Default minFee
+    if (suggestedParams.minFee !== undefined && suggestedParams.minFee !== null) {
+      const minFeeValue = typeof suggestedParams.minFee === 'bigint' ? Number(suggestedParams.minFee) : Number(suggestedParams.minFee);
+      if (!isNaN(minFeeValue) && minFeeValue > 0) {
+        minFee = minFeeValue;
+      }
+    }
     const totalFee = minFee + boxMBR;
-    console.log('💰 Add Member Fee Calculation:', { minFee, boxMBR, totalFee });
+    console.log('💰 Add Member Fee Calculation:', { 
+      minFee, 
+      boxMBR, 
+      totalFee, 
+      originalMinFee: suggestedParams.minFee,
+      isValid: !isNaN(totalFee) && totalFee > 0 && totalFee < Number.MAX_SAFE_INTEGER
+    });
+    
+    // Validate totalFee before converting to BigInt
+    if (isNaN(totalFee) || totalFee <= 0 || totalFee >= Number.MAX_SAFE_INTEGER) {
+      throw new Error(`Invalid fee calculated: ${totalFee}. minFee: ${minFee}, boxMBR: ${boxMBR}`);
+    }
     
     // Directly modify the original params object
     suggestedParams.flatFee = true;
