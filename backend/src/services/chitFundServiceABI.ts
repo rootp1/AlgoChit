@@ -206,14 +206,21 @@ export class ChitFundServiceABI {
     memberAddresses: string[] = []
   ) {
     const suggestedParams = await this.algodClient.getTransactionParams().do();
-    suggestedParams.flatFee = true;
+    const atc = new algosdk.AtomicTransactionComposer();
     
+    // Calculate fees for inner transactions
     const numInnerTxns = 1 + 1 + memberAddresses.filter(addr => addr !== winnerAddress).length;
     const feePerTxn = 1000;
-    suggestedParams.fee = feePerTxn * (1 + numInnerTxns);  // Use number, not BigInt
+    const totalFee = feePerTxn * (1 + numInnerTxns);
+    
+    const txnParams = {
+      ...suggestedParams,
+      flatFee: true,
+      fee: totalFee
+    };
     
     console.log('Number of inner txns expected:', numInnerTxns);
-    console.log('Total fee set:', suggestedParams.fee, 'microAlgos');
+    console.log('Total fee set:', totalFee, 'microAlgos');
     
     const winnerMemberBoxName = new Uint8Array(Buffer.concat([Buffer.from('m'), algosdk.decodeAddress(winnerAddress).publicKey]));
     const winnerBidBoxName = new Uint8Array(Buffer.concat([Buffer.from('b'), algosdk.decodeAddress(winnerAddress).publicKey]));
@@ -232,42 +239,30 @@ export class ChitFundServiceABI {
       }
     }
     
-    const method = this.getMethod('distributePot');
-    const methodSelector = method.getSelector();
-    const addressType = algosdk.ABIType.from('address');
-    const uint64Type = algosdk.ABIType.from('uint64');
-    const addressArrayType = algosdk.ABIType.from('address[]');
-    
-    const encodedArgs = [
-      methodSelector,
-      addressType.encode(winnerAddress),
-      uint64Type.encode(discountPercent),
-      addressArrayType.encode(memberAddresses)
-    ];
-    
-    const foreignAccounts = [winnerAddress, ...memberAddresses.filter(addr => addr !== winnerAddress)];
+    // Build list of foreign accounts (addresses that will receive payments)
+    const foreignAccounts = memberAddresses.filter(addr => addr !== winnerAddress);
     
     console.log('=== Transaction Details ===');
-    console.log('Foreign accounts (for inner txns):', foreignAccounts);
-    console.log('Fee multiplier:', Math.max(3, numInnerTxns));
-    console.log('Total fee:', suggestedParams.fee, 'microAlgos');
+    console.log('Winner:', winnerAddress);
+    console.log('Foreign accounts (non-winners):', foreignAccounts);
+    console.log('All members:', memberAddresses);
     console.log('Box references:', allBoxes.length);
     
-    const txn = algosdk.makeApplicationNoOpTxnFromObject({
-      from: managerAccount.addr,
-      appIndex: this.appId,
-      appArgs: encodedArgs,
-      accounts: foreignAccounts,
+    atc.addMethodCall({
+      appID: this.appId,
+      method: this.getMethod('distributePot'),
+      methodArgs: [winnerAddress, discountPercent, memberAddresses],
+      sender: managerAccount.addr,
+      signer: algosdk.makeBasicAccountTransactionSigner(managerAccount),
+      suggestedParams: txnParams,
       boxes: allBoxes,
-      suggestedParams
+      appAccounts: foreignAccounts
     });
     
-    const signedTxn = txn.signTxn(managerAccount.sk);
-    const { txid: txId } = await this.algodClient.sendRawTransaction(signedTxn).do();
-    await algosdk.waitForConfirmation(this.algodClient, txId, 4);
+    const result = await atc.execute(this.algodClient, 4);
     
     return {
-      txId,
+      txId: result.txIDs[0],
       winnerAddress,
       discountPercent
     };
