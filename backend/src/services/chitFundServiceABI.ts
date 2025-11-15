@@ -350,9 +350,11 @@ export class ChitFundServiceABI {
     try {
       const appInfo = await this.algodClient.getApplicationByID(this.appId).do();
       const globalState: Record<string, any> = {};
+      console.log('📊 Raw global state items count:', appInfo.params.globalState?.length || 0);
       if (appInfo.params.globalState) {
         appInfo.params.globalState.forEach((item: any) => {
           const key = Buffer.from(item.key, 'base64').toString();
+          console.log('🔑 Processing key:', key, 'type:', item.value.type);
           let value = item.value;
           if (value.type === 1) {
             // Handle bytes - try to decode as address if it's 32 bytes
